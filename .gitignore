@@ -1,0 +1,4 @@
+/state/
+/backups/
+*.bak
+.DS_Store
