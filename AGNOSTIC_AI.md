@@ -8,6 +8,7 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Keep authorization and constraints across turns. A status question or refinement steers the current task unless the user cancels or replaces it.
 - Do useful independent work while waiting for missing information. Ask only for information or permission that is necessary and not already available or granted.
 - When backlog work is requested, inspect every candidate issue and its comments, follow the current dependency graph, and process all actionable issues. Record concrete blockers and continue other independent work. Do not invent decisions or mark external prerequisites complete.
+- Verify current repository and deployed state before repeating an old issue's findings. Refresh a stale issue body or roadmap when later comments have left it contradicting the evidence.
 - Delegate independent work when useful and permitted by the active instructions. Do not force parallelism onto a trivial task. Give delegated agents distinct Lord of the Rings names and start descriptions with `Name (model):` where supported.
 - Give delegates the task scope and validation budget explicitly. Coordinate expensive checks in the main thread.
 
@@ -42,6 +43,13 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Validate the tree that will ship. Incorporate pending changes from main before the final gate where possible. Rerun affected checks after refactoring, resolving conflicts, or changing the validated tree.
 - Investigate inconsistent incremental build errors before deleting build state. Remove only the known stale artifact when that is the cause.
 - Report skips, failures, and unverified external steps. Do not turn a partial pass into a claim that the whole flow works.
+- Execute runbook commands exactly as documented, including startup, configuration selection, and shutdown where relevant. A working private launcher does not prove a different published command works.
+
+## Handle recovery evidence carefully
+
+- When access is authorized, inspect only what the task needs and keep credentials out of terminal output, command arguments, reports, and Git. Copy necessary recovery secrets directly between private files rather than printing them.
+- A backup claim needs a restore of the actual remote object, decrypted away from the machine it protects, with meaningful data and integrity checks. Listing files or restoring the local source dump proves less.
+- Keep encryption passwords, salts, referenced private keys, and other required recovery state together in the approved durable destination. A private local copy is useful progress, not proof that password-manager storage is complete.
 
 ## Review, refactor, and merge
 
