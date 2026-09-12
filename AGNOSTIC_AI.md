@@ -44,6 +44,7 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Investigate inconsistent incremental build errors before deleting build state. Remove only the known stale artifact when that is the cause.
 - Report skips, failures, and unverified external steps. Do not turn a partial pass into a claim that the whole flow works.
 - Execute runbook commands exactly as documented, including startup, configuration selection, and shutdown where relevant. A working private launcher does not prove a different published command works.
+- Before an authorized release, compare local deployment settings with current production when another machine may have changed them. Inspect names and equality without exposing values, preserve intentional production changes, and keep any necessary rollback copy private.
 
 ## Handle recovery evidence carefully
 
@@ -88,3 +89,4 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Materialize every row only when the outcome requires it, such as an aggregate, and explain that choice when it is not apparent.
 - Never bulk-delete generated files by glob. Check `git ls-files` and status first; generated directories may contain tracked files and unrelated work.
 - Clean only explicitly identified, disposable artifacts. Preserve tracked changes and other worktrees. Keep generated agnostic-ai output ignored where the project uses canonical specs.
+- Verify that shared instructions remain usable after generation, including referenced files. When one body is emitted at different directory depths, use explicit repository-root paths and state that convention; a clean sync alone does not prove the references work.
