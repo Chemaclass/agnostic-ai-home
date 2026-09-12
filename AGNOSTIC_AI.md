@@ -1,6 +1,6 @@
 # Global working agreements
 
-These are personal defaults across projects. Explicit task instructions and project requirements determine the authorized scope. Keep shared preferences here and run `agnostic-ai sync --global --only claude,codex`; edit a project's `.agnostic-ai/` for its domain rules. Generated native instructions are outputs, not another source to maintain.
+These are personal defaults across projects. Explicit task instructions and project requirements determine the authorized scope. Keep shared preferences here and run `agnostic-ai sync --global --only claude,codex`; keep each project's domain, review, testing, CI, and release policies in its own `.agnostic-ai/`. Generated native instructions are outputs, not another source to maintain.
 
 ## Carry authorized work through
 
@@ -23,46 +23,18 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Respect the issue's scope. Open a follow-up issue for unrelated work instead of expanding the PR silently.
 - Green checks, tidy commits, and easy review are quality gates. The acceptance scenario proves customer value.
 
-## Test business behavior
+## Validation cadence
 
-- Test observable behavior, domain rules, and outcomes. Avoid tests coupled to private functions, source text, incidental markup, or a particular implementation when those are not the contract.
-- Prioritize money movement, payment provider integration, tenant isolation, authorization, booking access, capacity, allowances, and the product's core differentiators.
-- Choose inputs that distinguish correct behavior from a plausible defect. Exercise boundaries, failure paths, replay, concurrency, and state transitions where the domain requires them. Remove assertions that cannot catch a regression.
-- Use a real database when locks, constraints, transactions, or query scoping are the subject. Use integration and end-to-end journeys to connect business-critical boundaries.
-- Keep ordinary tests deterministic. Use controlled provider boundaries there, and run real provider sandbox checks separately when authorized and configured.
-- For payment verification, check both sides of the transaction and the resulting entitlement or debt. A checkout redirect alone is not proof of settlement. Distinguish actual provider webhooks from locally signed fixtures.
-- Reuse existing fixture builders and test helpers. Do not add redundant coverage or broad matrices to inflate a count.
-- Support claims about external APIs, retries, buffers, and other defensive behavior with documentation, a discriminating test, or an observed response. State remaining uncertainty precisely.
-
-## Validate the final change locally
-
-- Do not dispatch GitHub Actions unless explicitly requested. Follow the project's local CI or release gate and record the result and validated revision.
 - Batch validation after the intended changes are complete. Do not run tests, typechecks, linters, or builds after every small edit.
 - Use an earlier targeted check only to diagnose a failure or unblock implementation.
 - Run expensive typechecks, full builds, and broad suites once per completed change set. Never run multiple typechecks concurrently. Budget these checks explicitly across worktrees and delegates.
-- Validate the tree that will ship. Incorporate pending changes from main before the final gate where possible. Rerun affected checks after refactoring, resolving conflicts, or changing the validated tree.
 - Investigate inconsistent incremental build errors before deleting build state. Remove only the known stale artifact when that is the cause.
-- Report skips, failures, and unverified external steps. Do not turn a partial pass into a claim that the whole flow works.
-- Execute runbook commands exactly as documented, including startup, configuration selection, and shutdown where relevant. A working private launcher does not prove a different published command works.
-- Before an authorized release, compare local deployment settings with current production when another machine may have changed them. Inspect names and equality without exposing values, preserve intentional production changes, and keep any necessary rollback copy private. Verify registry access with the credential the release actually uses; a working local Docker login may use a different one.
 
 ## Handle recovery evidence carefully
 
 - When access is authorized, inspect only what the task needs and keep credentials out of terminal output, command arguments, reports, and Git. Copy necessary recovery secrets directly between private files rather than printing them.
 - A backup claim needs a restore of the actual remote object, decrypted away from the machine it protects, with meaningful data and integrity checks. Listing files or restoring the local source dump proves less.
 - Keep encryption passwords, salts, referenced private keys, and other required recovery state together in the approved durable destination. A private local copy is useful progress, not proof that password-manager storage is complete.
-
-## Review, refactor, and merge
-
-- Use a focused PR per issue or independently valuable slice. Prefer getting coherent value to main promptly over stacking dependent fragments.
-- Fetch current main, incorporate concurrent changes safely, and inspect the full diff before pushing. Preserve changes made from another machine or worktree. Use the project's safeguards against reverting already merged work.
-- Never use `git reset --soft origin/main` to squash a branch. Rebase or use the repository's supported merge strategy.
-- After opening a PR, review the complete change for correctness, domain behavior, clarity, duplication, and maintainability. Look for a useful refactor before merging.
-- Add a separate refactor commit when it makes the change clearer or safer within scope. Consider it deliberately; do not manufacture churn just to produce a refactor commit.
-- Add new commits to an open PR. Do not amend existing commits or force push unless explicitly requested.
-- Merge only when merging is authorized, the final diff has been reviewed, relevant local gates pass, and no material correctness concern remains. Treat the user's "5/5 confidence" standard as this evidence gate, not a subjective score or a guarantee that no bug exists.
-- When merge authorization is already given, finish the review and merge without asking again. Update local main, then proceed to the next ready issue.
-- Describe what changed, why, meaningful verification, and material limitations in the PR. Keep public prose concise and factual.
 
 ## Writing in the user's voice
 

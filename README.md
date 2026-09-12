@@ -1,6 +1,6 @@
 # Personal defaults across projects
 
-`AGNOSTIC_AI.md` is the canonical source for shared working agreements. Project-specific domain rules belong in the project's `.agnostic-ai/` directory. Native instruction files are generated, and existing tool-specific configuration is preserved.
+`AGNOSTIC_AI.md` is the canonical source for shared working agreements. Project-specific domain, review, testing, CI, and release policies belong in the project's `.agnostic-ai/` directory. Native instruction files are generated, and existing tool-specific configuration is preserved.
 
 After editing the source:
 
