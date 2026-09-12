@@ -44,7 +44,7 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Investigate inconsistent incremental build errors before deleting build state. Remove only the known stale artifact when that is the cause.
 - Report skips, failures, and unverified external steps. Do not turn a partial pass into a claim that the whole flow works.
 - Execute runbook commands exactly as documented, including startup, configuration selection, and shutdown where relevant. A working private launcher does not prove a different published command works.
-- Before an authorized release, compare local deployment settings with current production when another machine may have changed them. Inspect names and equality without exposing values, preserve intentional production changes, and keep any necessary rollback copy private.
+- Before an authorized release, compare local deployment settings with current production when another machine may have changed them. Inspect names and equality without exposing values, preserve intentional production changes, and keep any necessary rollback copy private. Verify registry access with the credential the release actually uses; a working local Docker login may use a different one.
 
 ## Handle recovery evidence carefully
 
