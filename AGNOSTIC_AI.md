@@ -49,10 +49,14 @@ These are personal defaults across projects. Explicit task instructions and proj
 ## Code clarity
 
 - Choose names that describe the domain value and follow sibling code's conventions. Avoid vague names when a more specific one explains the meaning.
-- Comments explain a non-obvious reason, constraint, workaround, or tradeoff. Do not narrate the code or repeat an error message. Keep comments brief, current, and next to the line they explain.
+- Default to no comment. Write one only when the code cannot carry the reason: a constraint, a tradeoff, a workaround, a non-obvious failure mode. Never narrate what the code already says.
+- Keep it to one line wherever possible. No history, no retelling of the bug that caused it, no evidence tables, no restating an error message or a test. That context belongs in the commit, the PR, or the ticket. Cut every word that does not change what the reader does next.
+- Docblocks meet the same bar: they exist for a contract the signature cannot express, not because a symbol is exported.
 - Remove stale comments in code you touch. Avoid speculative notes about unbuilt work.
 - Prefer runtime validation over a type assertion when it states the contract more clearly.
 - Reuse shared helpers and conventional support locations. Apply an established replacement when the changed code already touches an obsolete pattern.
+- In domain code, keep decisions next to the data they protect: ask an object for an answer instead of pulling its data out and deciding elsewhere. Wrap primitives and collections when they carry rules or invariants. The `object-design` skill has the full method.
+- Skip that for DTOs, read models, serialization, ORM mappings, framework adapters, and performance-critical code, where exposing data is the job.
 
 ## Collections and generated files
 

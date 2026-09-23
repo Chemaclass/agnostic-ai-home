@@ -9,6 +9,6 @@ agnostic-ai sync --global --only claude,codex
 agnostic-ai sync --global --only claude,codex --check
 ```
 
-This writes the managed block in `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`. The Claude-only `@RTK.md` import remains outside that block. Restart an existing session to pick up changed global instructions reliably.
+This writes the managed block in `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`, and emits each `skills/<name>/SKILL.md` to `~/.claude/skills/` and `~/.agents/skills/`. The Claude-only `@RTK.md` import remains outside that block. Restart an existing session to pick up changed global instructions reliably.
 
 Ownership state and migration backups are local artifacts and are ignored. This directory has local Git history; no remote is configured and no personal configuration is published. Add a private backup destination separately if cross-machine distribution is needed.
