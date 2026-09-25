@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Block shell commands the global agreements forbid. Reads a hook payload on stdin."""
+import json
+import os
+import re
+import shlex
+import sys
+
+PUBLISHING = re.compile(r"\b(git\s+(commit|tag)|gh\s+(pr|issue|release)\s+(create|comment|edit|review))\b")
+DASHES = ("—", "–")
+SECRET_READERS = {"cat", "less", "more", "head", "tail", "bat", "strings", "xxd", "base64"}
+SECRET_PATH = re.compile(r"(^|/)(\.env(?!\.(example|sample|dist|template)$)(\.[\w.-]+)?|id_(rsa|ed25519|ecdsa)[^/]*|auth\.json|credentials[^/]*|\.npmrc|\.pypirc|\.netrc)$")
+
+
+def command_from(payload):
+    tool_input = payload.get("tool_input") or {}
+    return tool_input.get("command") or payload.get("command") or ""
+
+
+def words(command):
+    try:
+        return shlex.split(command)
+    except ValueError:
+        return command.split()
+
+
+def body_files(tokens):
+    for flag, value in zip(tokens, tokens[1:]):
+        if flag in ("--body-file", "-F", "--file"):
+            yield value
+
+
+def violation(command):
+    tokens = words(command)
+    if re.search(r"\bgit\s+push\b", command) and re.search(r"(\s--force(\s|$)|\s-f(\s|$)|\s\+\S)", command) and "--force-with-lease" not in command:
+        return "Force push without --force-with-lease. Use --force-with-lease so a newer remote commit is not overwritten."
+    for segment in re.split(r"&&|\|\||;|\|", command):
+        seg = words(segment)
+        if seg[:1] == ["rm"] and any(t.startswith("-") and "r" in t.lower() for t in seg[1:]) and any(ch in segment for ch in "*?"):
+            return "Recursive rm with a glob. Delete explicitly identified paths after checking `git ls-files` and `git status`."
+        if seg and os.path.basename(seg[0]) in SECRET_READERS and any(SECRET_PATH.search(t) for t in seg[1:]):
+            return "This would print a secret file. Copy secrets between private files without printing them."
+    if PUBLISHING.search(command):
+        text = command
+        for path in body_files(tokens):
+            try:
+                with open(os.path.expanduser(path), encoding="utf-8") as f:
+                    text += f.read()
+            except OSError:
+                pass
+        if any(d in text for d in DASHES):
+            return "Published text contains an em or en dash. Use commas, parentheses, colons, semicolons, or a regular hyphen."
+    return None
+
+
+def main():
+    try:
+        payload = json.load(sys.stdin)
+    except ValueError:
+        return 0
+    reason = violation(command_from(payload))
+    if not reason:
+        return 0
+    if "hook_event_name" not in payload and "tool_input" not in payload:
+        print(json.dumps({"permission": "deny", "user_message": reason, "agent_message": reason}))
+        return 0
+    print(reason, file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

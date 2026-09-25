@@ -61,7 +61,7 @@ Write down, one line each, every factual claim the PR rests on: "X is broken tod
 
 REFUTED is the verdict `prove-it` lacks, and the one that most often changes the outcome. Cite code as revision plus `file:line`; cite the exact test, log, query, ticket, or provider document otherwise. Never turn missing non-code evidence into a fake file citation.
 
-Delegate this. Verification is read-only and fans out well: group related claims, at most three clusters, one subagent each, all spawned in a single message so they run concurrently. Tell each to return `file:line` evidence and to say plainly when the claim does **not** hold. Give any agent that runs git commands worktree isolation and forbid checkout/stash/commit. Audit small PRs directly.
+Delegate this. Verification is read-only and fans out well: group related claims, at most three clusters, one `claim-verifier` subagent each (or a general read-only one where that agent is unavailable), all spawned in a single message so they run concurrently. Tell each to return `file:line` evidence and to say plainly when the claim does **not** hold. Give any agent that runs git commands worktree isolation and forbid checkout/stash/commit. Audit small PRs directly.
 
 **Three checks decide most verifications. Run them first:**
 
