@@ -3,4 +3,4 @@
 set -e
 cd "$(dirname "$0")"
 [ "$(basename "$0")" = pre-commit ] && set -- --check
-exec agnostic-ai sync --global --only claude,codex,cursor,opencode "$@"
+exec agnostic-ai sync --global --only claude,codex,cursor "$@"
