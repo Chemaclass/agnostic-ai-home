@@ -18,7 +18,7 @@ Use it as is, fork it, or read it for ideas.
 
 - **Agreements** (`AGNOSTIC_AI.md`): finish authorized work, slice features vertically, batch validation, keep secrets out of output, write plainly, keep code comments rare. Short on purpose: it loads in every session.
 - **Skills**: `gh-issue` and `gh-issues` (work one issue or the whole queue, one PR each), `pr-value-audit` (should this PR exist, and does every part earn its place), `object-design` (move decisions to the objects that own the data), `recovery-evidence` (what proves a backup works), `agnostic-ai-specs` (how to edit this kind of repo), `i-have-adhd` (output shaped for acting, not reading).
-- **Agents**: `locator` finds code, `claim-verifier` proves or refutes claims with `file:line` evidence, `reviewer` reports defects one line each. All three are read-only.
+- **Agents**: `locator` finds code, `claim-verifier` proves or refutes claims with `file:line` evidence, `reviewer` reports defects one line each. All three are read-only, and each sets a cheap or strong model for Claude and Codex in its frontmatter.
 - **Hook**: `guard-shell` blocks force pushes without `--force-with-lease`, recursive `rm` with a glob, printing secret files like `.env`, and em or en dashes in commit messages and `gh` text.
 
 ## Use it
@@ -47,19 +47,6 @@ hooks/my-guard.local.yaml           # a private hook
 For example, `rules/personal.local.md` can turn "give delegated agents distinct names" into your own naming scheme. Local files never leave your machine, so back them up somewhere private.
 
 Keep project-specific rules in that project's own `.agnostic-ai/` directory, not here. Skills that only make sense with one CLI's connectors (a Notion or Slack integration) can stay in that CLI's own skills folder.
-
-## Model tiers
-
-Only Claude and Codex get explicit models. Every other target, and every skill or agent without a tier, keeps the tool's default.
-
-| | Claude | Codex |
-|---|---|---|
-| `locator` | `haiku`, low | `gpt-6-luna`, low |
-| `claim-verifier` | `sonnet`, high | `gpt-6-sol`, medium |
-| `reviewer` | `opus`, high | `gpt-6-sol`, high |
-| `pr-value-audit` skill | `opus`, xhigh | tool default |
-
-Skills run in the main session, and Claude applies a skill's model for the rest of that turn. So only the one skill that needs deep judgment sets a model. Cheap work goes through `locator` instead. Claude names are aliases that follow the latest model; Codex names need an update when OpenAI renames them.
 
 ## Known limitations
 
