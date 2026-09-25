@@ -1,6 +1,6 @@
 # Global working agreements
 
-These are personal defaults across projects. Explicit task instructions and project requirements determine the authorized scope. Keep shared preferences here and run `agnostic-ai sync --global --only claude,codex`; keep each project's domain, review, testing, CI, and release policies in its own `.agnostic-ai/`. Generated native instructions are outputs, not another source to maintain.
+Personal defaults across projects. Explicit task instructions and project requirements determine the authorized scope. This file is generated from `~/.agnostic-ai/`; edit the source there, not here (the `agnostic-ai-specs` skill has the workflow).
 
 ## Carry authorized work through
 
@@ -30,17 +30,16 @@ These are personal defaults across projects. Explicit task instructions and proj
 - Run expensive typechecks, full builds, and broad suites once per completed change set. Never run multiple typechecks concurrently. Budget these checks explicitly across worktrees and delegates.
 - Investigate inconsistent incremental build errors before deleting build state. Remove only the known stale artifact when that is the cause.
 
-## Handle recovery evidence carefully
+## Secrets and recovery
 
-- When access is authorized, inspect only what the task needs and keep credentials out of terminal output, command arguments, reports, and Git. Copy necessary recovery secrets directly between private files rather than printing them.
-- A backup claim needs a restore of the actual remote object, decrypted away from the machine it protects, with meaningful data and integrity checks. Listing files or restoring the local source dump proves less.
-- Keep encryption passwords, salts, referenced private keys, and other required recovery state together in the approved durable destination. A private local copy is useful progress, not proof that password-manager storage is complete.
+- Keep credentials out of terminal output, command arguments, reports, and Git.
+- Before claiming a backup works or handling recovery secrets, use the `recovery-evidence` skill.
 
 ## Writing in the user's voice
 
 - Never use em or en dashes. Use commas, parentheses, colons, semicolons, or a regular hyphen.
 - Write public GitHub comments directly in the user's voice. Do not mention AI generation, agent skills, internal workflows, or attribution boilerplate. Describe tooling normally when it is the subject of the work.
-- Before drafting messages, PR prose, review comments, or work documents in the user's name, consult the current voice guide at `https://raw.githubusercontent.com/Chemaclass/chemaclass.com/main/.claude/skills/writing-style/SKILL.md`. If unavailable, use these local defaults and report the limitation when material.
+- Before drafting messages, PR prose, review comments, or work documents in the user's name, read the voice guide at `~/Code/Chemaclass/chemaclass.com/.claude/skills/writing-style/SKILL.md` (with the references it lists), or fetch `https://raw.githubusercontent.com/Chemaclass/chemaclass.com/main/.claude/skills/writing-style/SKILL.md` when the local checkout is missing. If neither is available, use these defaults and report the limitation when material.
 - Prefer plain language, concrete verbs, short sentences, and one idea at a time. Use fragments and bold sparingly for emphasis. Avoid corporate hype, filler adverbs, exclamation marks, and metaphor jargon.
 - State uncertainty as a specific limitation instead of vague hedging.
 - When restyling existing text, preserve its claims. Surface factual errors separately.
@@ -60,9 +59,6 @@ These are personal defaults across projects. Explicit task instructions and proj
 
 ## Collections and generated files
 
-- Search paginated or asynchronous collections lazily and return on the match. Use a named helper instead of an inline async IIFE.
-- Expose asynchronous iteration from paginated wrappers so callers can stop without draining every page. Bound concurrent requests when scanning widely.
+- Search paginated or asynchronous collections lazily and return on the match. Expose asynchronous iteration from paginated wrappers so callers can stop early, and bound concurrent requests when scanning widely. Use a named helper instead of an inline async IIFE.
 - Materialize every row only when the outcome requires it, such as an aggregate, and explain that choice when it is not apparent.
-- Never bulk-delete generated files by glob. Check `git ls-files` and status first; generated directories may contain tracked files and unrelated work.
-- Clean only explicitly identified, disposable artifacts. Preserve tracked changes and other worktrees. Keep generated agnostic-ai output ignored where the project uses canonical specs.
-- Verify that shared instructions remain usable after generation, including referenced files. When one body is emitted at different directory depths, use explicit repository-root paths and state that convention; a clean sync alone does not prove the references work.
+- Never bulk-delete generated files by glob. Check `git ls-files` and status first; generated directories may contain tracked files and unrelated work. Clean only explicitly identified, disposable artifacts, and preserve tracked changes and other worktrees.
