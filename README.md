@@ -9,7 +9,7 @@ After editing the source:
 ./sync.sh --check  # verify no drift (also runs as the pre-commit hook)
 ```
 
-This writes the managed instructions to `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.cursor/AGENTS.md` (injected by a `sessionStart` hook), and `~/.config/opencode/AGENTS.md`, and emits each `skills/<name>/SKILL.md` to `~/.claude/skills/`, `~/.agents/skills/`, `~/.cursor/skills/`, and `~/.config/opencode/skills/`. The Claude-only `@RTK.md` import remains outside the managed block. Restart an existing session to pick up changed global instructions reliably.
+This writes the managed instructions to `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, and `~/.cursor/AGENTS.md` (injected by a `sessionStart` hook), and emits each `skills/<name>/SKILL.md` to `~/.claude/skills/`, `~/.agents/skills/`, and `~/.cursor/skills/`. The Claude-only `@RTK.md` import remains outside the managed block. Restart an existing session to pick up changed global instructions reliably.
 
 Skills that depend on one CLI's connectors (for example `notion-work`, `perso_slack-me`, `incident`) stay in that CLI's own skills directory on purpose. Employer-specific notes never go in this repo: keep them in `~/.claude/skills/<name>/` and symlink that directory into `~/.agents/skills/` and `~/.cursor/skills/` so every CLI can load it. A skill directory that already exists unmanaged blocks sync with "unmanaged global skill collision"; move it into `backups/` before adopting it here.
 
