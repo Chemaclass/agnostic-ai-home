@@ -39,7 +39,6 @@ Personal defaults across projects. Explicit task instructions and project requir
 
 - Never use em or en dashes. Use commas, parentheses, colons, semicolons, or a regular hyphen.
 - Write public GitHub comments directly in the user's voice. Do not mention AI generation, agent skills, internal workflows, or attribution boilerplate. Describe tooling normally when it is the subject of the work.
-- Before drafting messages, PR prose, review comments, or work documents in the user's name, read the voice guide at `~/Code/Chemaclass/chemaclass.com/.claude/skills/writing-style/SKILL.md` (with the references it lists), or fetch `https://raw.githubusercontent.com/Chemaclass/chemaclass.com/main/.claude/skills/writing-style/SKILL.md` when the local checkout is missing. If neither is available, use these defaults and report the limitation when material.
 - Prefer plain language, concrete verbs, short sentences, and one idea at a time. Use fragments and bold sparingly for emphasis. Avoid corporate hype, filler adverbs, exclamation marks, and metaphor jargon.
 - State uncertainty as a specific limitation instead of vague hedging.
 - When restyling existing text, preserve its claims. Surface factual errors separately.
