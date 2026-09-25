@@ -2,3 +2,8 @@
 /backups/
 *.bak
 .DS_Store
+
+# Personal extensions: synced, never committed
+*.local.md
+*.local.yaml
+*.local/

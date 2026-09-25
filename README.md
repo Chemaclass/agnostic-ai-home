@@ -1,20 +1,71 @@
-# Personal defaults across projects
+# agnostic-ai home
 
-`AGNOSTIC_AI.md` is the canonical source for shared working agreements. `skills/` holds on-demand skills, `agents/` holds read-only subagents (`locator`, `claim-verifier`, `reviewer`), and `hooks/` holds `guard-shell`, which runs `scripts/guard-shell.py` before every shell command to block force pushes without a lease, recursive `rm` with globs, printing secret files, and em or en dashes in published text. Project-specific domain, review, testing, CI, and release policies belong in the project's `.agnostic-ai/` directory. Native instruction files are generated, and existing tool-specific configuration is preserved.
+A personal, tool-agnostic setup for AI coding CLIs. Write your working agreements, skills, agents, and hooks once. [agnostic-ai](https://agnostic-ai.org) turns them into native config for Claude Code, Codex, and Cursor.
 
-After editing the source:
+Use it as is, fork it, or read it for ideas.
 
-```bash
-./sync.sh          # write
-./sync.sh --check  # verify no drift (also runs as the pre-commit hook)
+## What is inside
+
+```text
+~/.agnostic-ai/
+├── AGNOSTIC_AI.md   # working agreements, loaded in every session
+├── skills/          # loaded on demand, when the task matches
+├── agents/          # read-only subagents with a model tier each
+├── hooks/           # guards that run before shell commands
+├── scripts/         # code the hooks call
+└── sync.sh          # the one command to sync and check
 ```
 
-This writes the managed instructions to `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, and `~/.cursor/AGENTS.md` (injected by a `sessionStart` hook), and emits each `skills/<name>/SKILL.md` to `~/.claude/skills/`, `~/.agents/skills/`, and `~/.cursor/skills/`. The Claude-only `@RTK.md` import remains outside the managed block. Restart an existing session to pick up changed global instructions reliably.
+- **Agreements** (`AGNOSTIC_AI.md`): finish authorized work, slice features vertically, batch validation, keep secrets out of output, write plainly, keep code comments rare. Short on purpose: it loads in every session.
+- **Skills**: `gh-issue` and `gh-issues` (work one issue or the whole queue, one PR each), `pr-value-audit` (should this PR exist, and does every part earn its place), `object-design` (move decisions to the objects that own the data), `recovery-evidence` (what proves a backup works), `agnostic-ai-specs` (how to edit this kind of repo), `i-have-adhd` (output shaped for acting, not reading).
+- **Agents**: `locator` finds code, `claim-verifier` proves or refutes claims with `file:line` evidence, `reviewer` reports defects one line each. All three are read-only.
+- **Hook**: `guard-shell` blocks force pushes without `--force-with-lease`, recursive `rm` with a glob, printing secret files like `.env`, and em or en dashes in commit messages and `gh` text.
 
-Model tiers: only Claude and Codex get explicit models; every other target, and every unlisted skill or agent, keeps the tool's own default. Agents pick a tier by job: `locator` is cheap (`haiku` / `gpt-6-luna`, low effort), `claim-verifier` is the workhorse (`sonnet` / `gpt-6-sol`), and `reviewer` spends more where a missed bug costs most (`opus` / `gpt-6-sol`, high effort). Skills run in the main session, so only `pr-value-audit` sets one: `model: opus`, `effort: xhigh`, which Claude applies for that turn and Codex ignores. Claude uses aliases that track the latest model; Codex slugs need a bump when OpenAI renames them.
+## Use it
 
-Hook targeting: `sync --global` currently ignores `target`/`targets` on hook specs (a known agnostic-ai limitation, tracked upstream), so one Claude-style `PreToolUse` hook is emitted to all three CLIs. Cursor runs it through its third-party import of `~/.claude/settings.json` (on by default); the script also answers Cursor's native `beforeShellExecution` payload if that event is wired later.
+1. [Install agnostic-ai](https://agnostic-ai.org/docs/installation/).
+2. Clone this repo to `~/.agnostic-ai` (or point `AGNOSTIC_AI_HOME` at your clone).
+3. Edit `sync.sh` to list the CLIs you use.
+4. Run `./sync.sh`, then `./sync.sh --check`.
+5. Install the drift check: `ln -sf ../../sync.sh .git/hooks/pre-commit`.
 
-Skills that depend on one CLI's connectors (a Notion or Slack integration, for example) stay in that CLI's own skills directory on purpose. Employer-specific notes never go in this repo: keep them in `~/.claude/skills/<name>/` and symlink that directory into `~/.agents/skills/` and `~/.cursor/skills/` so every CLI can load it. A skill directory that already exists unmanaged blocks sync with "unmanaged global skill collision"; move it into `backups/` before adopting it here.
+Restart open sessions to load the new instructions.
 
-Ownership state and migration backups are local artifacts and are ignored. The repo is pushed to a private GitHub remote as the off-machine copy. Install the drift check once per clone with `ln -sf ../../sync.sh .git/hooks/pre-commit`.
+Sync writes a managed block into `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, and `~/.cursor/AGENTS.md`, and real files into each tool's skills, agents, and hooks locations. Text outside the managed block is yours and stays untouched. If a skill folder with the same name already exists, sync stops with "unmanaged global skill collision": move the old folder aside, then sync again.
+
+## Extend it without forking the shared parts
+
+Anything named `*.local.md`, `*.local.yaml`, or `*.local/` is gitignored but still synced. Use it for what should not be public: personal quirks, employer notes, private workflows.
+
+```text
+rules/personal.local.md             # extra agreements, appended to the managed block
+skills/work-notes.local/SKILL.md    # a private skill, emitted under its frontmatter name
+agents/my-helper.local.md           # a private agent
+hooks/my-guard.local.yaml           # a private hook
+```
+
+For example, `rules/personal.local.md` can turn "give delegated agents distinct names" into your own naming scheme. Local files never leave your machine, so back them up somewhere private.
+
+Keep project-specific rules in that project's own `.agnostic-ai/` directory, not here. Skills that only make sense with one CLI's connectors (a Notion or Slack integration) can stay in that CLI's own skills folder.
+
+## Model tiers
+
+Only Claude and Codex get explicit models. Every other target, and every skill or agent without a tier, keeps the tool's default.
+
+| | Claude | Codex |
+|---|---|---|
+| `locator` | `haiku`, low | `gpt-6-luna`, low |
+| `claim-verifier` | `sonnet`, high | `gpt-6-sol`, medium |
+| `reviewer` | `opus`, high | `gpt-6-sol`, high |
+| `pr-value-audit` skill | `opus`, xhigh | tool default |
+
+Skills run in the main session, and Claude applies a skill's model for the rest of that turn. So only the one skill that needs deep judgment sets a model. Cheap work goes through `locator` instead. Claude names are aliases that follow the latest model; Codex names need an update when OpenAI renames them.
+
+## Known limitations
+
+- agnostic-ai 0.68 ignores `target` on global hooks, so the one Claude-style `PreToolUse` hook also lands in Codex and Cursor. Cursor still runs it through its import of `~/.claude/settings.json` (on by default). Fixed upstream, pending release.
+- Global sync copies skill files as they are, so per-tool `model` maps and `x-claude` blocks on skills are not resolved. That is why `pr-value-audit` uses a plain `model: opus`, which Codex and Cursor ignore.
+
+## License
+
+MIT, see `LICENSE`. `skills/i-have-adhd` is adapted from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) and keeps its own MIT notice in `skills/i-have-adhd/LICENSE`.
