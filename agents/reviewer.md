@@ -2,6 +2,8 @@
 name: reviewer
 description: Read-only code reviewer for a diff, branch, or PR. Returns one line per finding, most severe first, with no praise and no style nits. Use for a second pass on a change before opening or merging a PR.
 tools: [Read, Grep, Glob, Bash]
+model: {claude: opus, codex: gpt-6-astra}
+effort: {claude: high, codex: high}
 readonly: true
 x-codex:
   sandbox_mode: read-only
