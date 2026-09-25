@@ -73,13 +73,6 @@ A local rule can sharpen a shared one, for example turn "give delegated agents d
 
 Project rules belong in that project's `.agnostic-ai/`, not here. Skills tied to one CLI's connectors, like a Notion or Slack integration, can stay in that CLI's own skills folder.
 
-## Known limitations (agnostic-ai 0.68.0)
-
-- Global hooks ignore `target`, so the Claude-style `PreToolUse` hook also lands in Codex and Cursor. Cursor still runs it through its import of `~/.claude/settings.json`.
-- Global skills are copied as they are, so `pr-value-audit` uses a plain `model: opus`, which Codex and Cursor ignore.
-
-Both are fixed upstream and go away with the next release.
-
 ## License
 
 MIT, see `LICENSE`. `skills/i-have-adhd` is adapted from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) and keeps its MIT notice in `skills/i-have-adhd/LICENSE`.
