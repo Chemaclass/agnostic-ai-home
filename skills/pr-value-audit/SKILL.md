@@ -2,6 +2,8 @@
 name: pr-value-audit
 disable-model-invocation: true
 description: Audit whether a PR is worth shipping at all, and whether every part of it earns its place. Verifies every premise against the base branch, hunts duplication and YAGNI, labels each unit essential/defensive/speculative, and proposes cuts. For how the code is written, use the repo's `high-level-pr-review` skill when it has one. Accepts a PR number, URL, or branch; defaults to the current branch.
+model: opus
+effort: xhigh
 ---
 
 # PR Value Audit
