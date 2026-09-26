@@ -25,7 +25,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 ~/.agnostic-ai/sync.sh
 ```
 
-Restart open sessions. That syncs Claude Code, Codex, and Cursor; list other tools in `local/targets`. If sync stops on a collision with a skill you already have, [SETUP.md](SETUP.md#4-preview-and-resolve-collisions) says how to keep yours.
+Restart open sessions. That syncs Claude Code, Codex, and Cursor; list other tools in `~/.agnostic-ai/local/targets`. If sync stops on a collision with a skill you already have, [SETUP.md](SETUP.md#4-preview-and-resolve-collisions) says how to keep yours.
 
 Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
 
@@ -38,7 +38,7 @@ Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
 ├── agents/          # read-only subagents
 ├── hooks/           # checks before shell commands
 ├── scripts/         # code the hooks run
-├── local/           # private overrides, gitignored
+├── local/           # yours: gitignored, still synced
 └── sync.sh          # sync, or check with --check
 ```
 
@@ -68,16 +68,16 @@ Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
 
 ## Make it yours
 
-Keep your changes in `local/`, never in tracked files. It is gitignored but still synced, so `git pull` never conflicts. A file there replaces the shared spec with the same kind and name; a new name is added.
+Keep your changes in `~/.agnostic-ai/local/`, never in tracked files. It is a folder inside your clone, gitignored but still synced, so `git pull` never conflicts. A file there with the same kind and name as a shared spec replaces it; a new name is added.
 
 ```text
-local/targets                     # tools to sync, e.g. claude,codex,gemini
-local/AGNOSTIC_AI.md              # extra agreements, appended to the shared ones
-local/skills/work-notes/SKILL.md  # a private skill
-local/agents/reviewer.md          # replaces the shared reviewer
+~/.agnostic-ai/local/targets                     # tools to sync, e.g. claude,codex,gemini
+~/.agnostic-ai/local/AGNOSTIC_AI.md              # appended after the shared agreements
+~/.agnostic-ai/local/skills/work-notes/SKILL.md  # a private skill
+~/.agnostic-ai/local/agents/reviewer.md          # replaces agents/reviewer.md
 ```
 
-To switch off a shared skill, agent, or hook, copy it into `local/` and add `targets-exclude: [claude, codex, cursor]`. `agnostic-ai list --global` shows which layer each spec comes from. Back up `local/` somewhere private: it never leaves your machine.
+To switch off a shared skill, agent, or hook, copy it into the same path under `local/` and add `targets-exclude: [claude, codex, cursor]`. `agnostic-ai list --global` shows which layer each spec comes from. Back up `local/` somewhere private: it never leaves your machine.
 
 Project rules belong in that project's `.agnostic-ai/`, not here. Skills tied to one CLI's connectors, like a Notion or Slack integration, can stay in that CLI's own skills folder.
 
