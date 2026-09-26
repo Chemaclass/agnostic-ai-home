@@ -26,8 +26,8 @@ All paths are under `~/.agnostic-ai/` (the clone, through the symlink). `local/`
 
 - `local/targets`: comma-separated agnostic-ai target names to sync.
 - `local/AGNOSTIC_AI.md`: appended after the shared agreements.
-- `local/skills/<name>/SKILL.md`, `local/agents/<name>.md`, `local/hooks/<name>.yaml`: a same-name file replaces the shared spec whole; a new name is added.
-- Switch a shared spec off by copying it to the same path under `local/` with `targets-exclude: [<every synced target>]`.
+- `local/skills/<name>/SKILL.md`, `local/agents/<name>.md`, `local/hooks/<name>.yaml`: a new name is added; a same-name file merges into the shared spec (agnostic-ai 0.69.0+). Frontmatter maps merge key by key, scalars and lists replace, `null` removes a key. An empty body keeps the shared body, a `::parent` line inserts it, any other body replaces it.
+- Switch a shared spec off with a local file holding only `name` and `targets-exclude: [<every synced target>]`.
 - `agnostic-ai list --global` shows each spec's layer (`global` or `global-local`).
 
 ## agnostic-ai
@@ -35,4 +35,5 @@ All paths are under `~/.agnostic-ai/` (the clone, through the symlink). `local/`
 - [agnostic-ai llms.txt](https://agnostic-ai.org/llms.txt): the tool's own index.
 - [Spec format](https://agnostic-ai.org/docs/spec-format/): frontmatter fields, per-target maps, `x-<target>` blocks, target scoping.
 - [Global configuration](https://agnostic-ai.org/docs/configuration/#global-configuration): `--global`, the `local/` layer, collisions, ownership state.
+- [Local overrides](https://agnostic-ai.org/docs/local-overrides/): field merge, `null`, `::parent`, skill assets.
 - [Targets](https://agnostic-ai.org/docs/targets/): every tool's paths and capabilities.

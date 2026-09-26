@@ -357,17 +357,17 @@ You find code. You never edit files...</pre>
 <p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text.</p>
 
 <h2 id="make-it-yours">Make it yours without forking</h2>
-<p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A file there with the same kind and name as a shared spec replaces it; a new name is added. <code>git pull</code> never conflicts.</p>
+<p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A new name is added. A file with the same kind and name as a shared spec merges into it: write only the fields that change, and a <code>::parent</code> line to extend the body. <code>git pull</code> never conflicts.</p>
 <div class="file tree">
   <div class="file-path"><b>~/.agnostic-ai/local/</b><span>gitignored</span></div>
 <pre>targets                      <span class="c"># claude,codex,gemini</span>
 AGNOSTIC_AI.md               <span class="c"># appended after the shared agreements</span>
 skills/work-notes/SKILL.md   <span class="c"># a private skill</span>
-agents/reviewer.md           <span class="c"># replaces agents/reviewer.md</span></pre>
+agents/reviewer.md           <span class="c"># edits agents/reviewer.md</span></pre>
 </div>
-<p class="prose">To switch a shared skill, agent, or hook off, copy it into the same path under <code>local/</code> and add <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
+<p class="prose">To switch a shared skill, agent, or hook off, create the same path under <code>local/</code> with only <code>name</code> and <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
 
-<p class="prose">To update, pull and sync from any directory. For each local replacement, diff the shared file and merge what you want.</p>
+<p class="prose">To update, pull and sync from any directory. Sync applies your local fields on top of the new shared specs. Only a local body that replaces the shared one needs a manual merge.</p>
 <div class="file tree">
   <div class="file-path"><b>shell</b><span>update</span></div>
 <pre>git -C ~/.agnostic-ai pull --ff-only &amp;&amp; ~/.agnostic-ai/sync.sh</pre>
