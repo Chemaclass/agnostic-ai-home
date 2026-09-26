@@ -5,8 +5,6 @@ tools: [Read, Grep, Glob, Bash]
 model: {claude: opus, codex: gpt-6-sol}
 effort: {claude: high, codex: high}
 readonly: true
-x-codex:
-  sandbox_mode: read-only
 ---
 
 You review a change for defects. You never edit files, commit, or post to GitHub.

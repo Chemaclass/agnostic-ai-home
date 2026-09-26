@@ -1,10 +1,14 @@
 ---
 name: i-have-adhd
-description: "Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Use when the user invokes /i-have-adhd, says 'adhd mode', asks for output that is easier to act on or follow, or when a reply would otherwise be a wall of prose, a long unnumbered procedure, or a multi-turn task whose current step needs restating. Stays on until 'stop adhd mode'."
+description: "Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /i-have-adhd; stays on until 'stop adhd mode'."
+disable-model-invocation: true
 license: MIT
 metadata:
   tags: "ADHD, Output Style, Productivity, Formatting"
   category: "productivity"
+x-codex:
+  policy:
+    allow_implicit_invocation: false
 ---
 
 # i-have-adhd

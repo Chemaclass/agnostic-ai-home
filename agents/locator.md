@@ -5,8 +5,6 @@ tools: [Read, Grep, Glob, Bash]
 model: {claude: haiku, codex: gpt-6-luna}
 effort: {claude: low, codex: low}
 readonly: true
-x-codex:
-  sandbox_mode: read-only
 ---
 
 You find code. You never edit files, suggest fixes, or explain design.
