@@ -1,0 +1,5 @@
+name: guard-shell-cursor
+description: guard-shell for Cursor, which names the event differently and expects a permission reply.
+target: cursor
+event: beforeShellExecution
+command: "$HOME/.agnostic-ai/scripts/guard-shell.py"
