@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agnostic-ai home</title>
+<meta name="description" content="A global setup for AI coding agents, written once in ~/.agnostic-ai and synced to Claude Code, Codex, and Cursor with agnostic-ai.">
+<link rel="alternate" type="text/plain" title="llms.txt" href="llms.txt">
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1d1b; --muted: #66645e; --line: #e2dfd6; --card: #ffffff;
+  --accent: #2f6b4f; --accent-soft: #e4efe8; --code: #f3f1ea; --warn: #8a5a12;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141513; --fg: #e8e6df; --muted: #a09d94; --line: #2c2e2a; --card: #1b1c1a;
+    --accent: #7cc39c; --accent-soft: #1f2d25; --code: #20221f; --warn: #e0b060;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 var(--sans); }
+main { max-width: 880px; overflow-wrap: anywhere; margin: 0 auto; padding: 48px 16px 80px; }
+h1 { font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem; margin: 56px 0 8px; letter-spacing: -0.01em; }
+h3 { font-size: 1rem; margin: 0 0 6px; }
+p { margin: 0 0 12px; }
+.lede { font-size: 1.15rem; color: var(--muted); max-width: 640px; }
+a { color: var(--accent); }
+nav { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 20px 0 0; font-size: 0.95rem; }
+code, pre { font-family: var(--mono); font-size: 0.86rem; }
+:not(pre) > code { background: var(--code); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin: 0 0 12px; line-height: 1.5; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.prompt { position: relative; margin-top: 28px; border-color: var(--accent); }
+.prompt pre { margin: 8px 0 0; white-space: pre-wrap; padding-right: 84px; }
+.label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+button.copy { position: absolute; top: 44px; right: 28px; font: 600 0.8rem var(--sans); color: var(--bg); background: var(--accent); border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.diagram { margin: 16px 0 0; }
+.diagram svg { width: 100%; height: auto; display: block; }
+.diagram text { font-family: var(--mono); fill: var(--fg); }
+.diagram .dim { fill: var(--muted); }
+.diagram .box { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+.diagram .hi { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+.diagram .arrow { stroke: var(--accent); stroke-width: 1.8; fill: none; marker-end: url(#head); }
+.diagram .dash { stroke-dasharray: 5 4; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 16px; }
+.grid > * { min-width: 0; }
+.grid pre { margin: 6px 0 0; font-size: 0.8rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 12px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.scroll { overflow-x: auto; }
+ol.steps { padding-left: 20px; }
+ol.steps li { margin-bottom: 6px; }
+.note { color: var(--warn); }
+footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+.stamp { font-size: 1.25rem; font-weight: 600; color: var(--fg); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>agnostic-ai home</h1>
+  <p class="lede">A global setup for AI coding agents. Written once in <code>~/.agnostic-ai</code>, synced to Claude Code, Codex, and Cursor in each one's native format by <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
+  <nav>
+    <a href="https://github.com/Chemaclass/agnostic-ai-home">Repository</a>
+    <a href="https://github.com/Chemaclass/agnostic-ai-home/blob/main/SETUP.md">SETUP.md</a>
+    <a href="llms.txt">llms.txt</a>
+    <a href="https://agnostic-ai.org/llms.txt">agnostic-ai llms.txt</a>
+  </nav>
+</header>
+
+<section class="card prompt" aria-labelledby="prompt-title">
+  <div class="label" id="prompt-title">Paste into any coding agent</div>
+  <pre id="prompt">Set up https://github.com/Chemaclass/agnostic-ai-home as my global AI config. Clone it, then follow its SETUP.md step by step.</pre>
+  <button class="copy" type="button" data-copy="prompt">Copy</button>
+  <p style="margin:10px 0 0;color:var(--muted);font-size:0.9rem">The agent installs agnostic-ai, links the clone, detects your tools, keeps your existing skills, and verifies the sync.</p>
+</section>
+
+<h2>How it works</h2>
+<p>One git clone is the source. A symlink makes it the agnostic-ai home. Sync reads the shared specs plus your private <code>local/</code> layer and writes real files into each tool.</p>
+<div class="card diagram">
+  <svg viewBox="0 0 820 330" role="img" aria-labelledby="dia-title">
+    <title id="dia-title">The clone is linked to ~/.agnostic-ai; sync merges shared specs with local/ and writes native files for Claude Code, Codex, and Cursor.</title>
+    <defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
+    <rect class="box" x="10" y="30" width="230" height="120" rx="8"/>
+    <text x="24" y="56" font-size="14" font-weight="700">git clone</text>
+    <text x="24" y="80" font-size="12" class="dim">~/Code/agnostic-ai-home</text>
+    <text x="24" y="104" font-size="12">AGNOSTIC_AI.md  skills/</text>
+    <text x="24" y="124" font-size="12">agents/  hooks/  scripts/</text>
+    <rect class="box dash" x="10" y="180" width="230" height="110" rx="8"/>
+    <text x="24" y="206" font-size="14" font-weight="700">local/</text>
+    <text x="24" y="230" font-size="12" class="dim">gitignored, still synced</text>
+    <text x="24" y="254" font-size="12">targets  AGNOSTIC_AI.md</text>
+    <text x="24" y="274" font-size="12">skills/ agents/ hooks/</text>
+    <rect class="hi" x="290" y="115" width="210" height="90" rx="8"/>
+    <text x="306" y="142" font-size="14" font-weight="700">~/.agnostic-ai</text>
+    <text x="306" y="166" font-size="12" class="dim">symlink to the clone</text>
+    <text x="306" y="190" font-size="12">sync.sh</text>
+    <path class="arrow" d="M240,90 C265,90 265,140 286,140"/>
+    <path class="arrow dash" d="M240,235 C265,235 265,180 286,180"/>
+    <text x="306" y="228" font-size="11" class="dim">agnostic-ai sync --global</text>
+    <rect class="box" x="598" y="20" width="214" height="84" rx="8"/>
+    <text x="612" y="46" font-size="14" font-weight="700">Claude Code</text>
+    <text x="612" y="68" font-size="11">~/.claude/CLAUDE.md</text>
+    <text x="612" y="86" font-size="11" class="dim">skills/ agents/ settings.json</text>
+    <rect class="box" x="598" y="123" width="214" height="84" rx="8"/>
+    <text x="612" y="149" font-size="14" font-weight="700">Codex</text>
+    <text x="612" y="171" font-size="11">~/.codex/AGENTS.md</text>
+    <text x="612" y="189" font-size="11" class="dim">agents/*.toml hooks.json</text>
+    <rect class="box" x="598" y="226" width="214" height="84" rx="8"/>
+    <text x="612" y="252" font-size="14" font-weight="700">Cursor</text>
+    <text x="612" y="274" font-size="11">~/.cursor/AGENTS.md</text>
+    <text x="612" y="292" font-size="11" class="dim">skills/ agents/ hooks.json</text>
+    <path class="arrow" d="M500,140 C560,140 560,62 594,62"/>
+    <path class="arrow" d="M500,160 L594,165"/>
+    <path class="arrow" d="M500,180 C560,180 560,268 594,268"/>
+  </svg>
+</div>
+
+<h2>One spec, three native files</h2>
+<p>Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. This is <code>agents/locator.md</code> and what sync writes from it.</p>
+<pre>---
+name: locator
+tools: [Read, Grep, Glob, Bash]
+model: {claude: haiku, codex: gpt-6-luna}
+effort: {claude: low, codex: low}
+readonly: true
+---
+You find code. You never edit files...</pre>
+<div class="grid">
+  <div class="card"><h3>Claude Code</h3><code>~/.claude/agents/locator.md</code><pre>tools: [Read, Grep, Glob, Bash]
+model: haiku
+effort: low</pre></div>
+  <div class="card"><h3>Codex</h3><code>~/.codex/agents/locator.toml</code><pre>model = "gpt-6-luna"
+model_reasoning_effort = "low"
+sandbox_mode = "read-only"</pre></div>
+  <div class="card"><h3>Cursor</h3><code>~/.cursor/agents/locator.md</code><pre>readonly: true</pre></div>
+</div>
+<p>A field a tool cannot honor is dropped with a note at sync time, never silently.</p>
+
+<h2>Where each source lands</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>Source</th><th>Claude Code</th><th>Codex</th><th>Cursor</th></tr></thead>
+  <tbody>
+    <tr><td><code>AGNOSTIC_AI.md</code></td><td>managed block in <code>~/.claude/CLAUDE.md</code></td><td><code>~/.codex/AGENTS.md</code></td><td><code>~/.cursor/AGENTS.md</code></td></tr>
+    <tr><td><code>skills/&lt;n&gt;/SKILL.md</code></td><td><code>~/.claude/skills/&lt;n&gt;/</code></td><td><code>~/.agents/skills/&lt;n&gt;/</code></td><td><code>~/.cursor/skills/&lt;n&gt;/</code></td></tr>
+    <tr><td><code>agents/&lt;n&gt;.md</code></td><td><code>~/.claude/agents/&lt;n&gt;.md</code></td><td><code>~/.codex/agents/&lt;n&gt;.toml</code></td><td><code>~/.cursor/agents/&lt;n&gt;.md</code></td></tr>
+    <tr><td><code>hooks/*.yaml</code></td><td><code>~/.claude/settings.json</code></td><td><code>~/.codex/hooks.json</code></td><td><code>~/.cursor/hooks.json</code></td></tr>
+  </tbody>
+</table>
+</div>
+<p>Text outside the managed block stays yours. Sync records what it owns in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
+
+<h2>Where tools really differ</h2>
+<p>Sync never translates hook events. So the shell guard ships as two specs over one script: Claude and Codex share <code>PreToolUse</code>, Cursor needs <code>beforeShellExecution</code> and a JSON reply.</p>
+<div class="grid">
+  <div class="card"><h3>hooks/guard-shell.yaml</h3><pre>targets: [claude, codex]
+event: PreToolUse
+matcher: Bash
+command: "$HOME/.agnostic-ai/scripts/guard-shell.py"</pre></div>
+  <div class="card"><h3>hooks/guard-shell-cursor.yaml</h3><pre>target: cursor
+event: beforeShellExecution
+command: "$HOME/.agnostic-ai/scripts/guard-shell.py"</pre></div>
+</div>
+<p>It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text.</p>
+
+<h2>Make it yours without forking</h2>
+<p>Never edit tracked files. Put your changes in <code>local/</code>. A local spec with the same kind and name replaces the shared one; a new name is added. <code>git pull</code> never conflicts.</p>
+<pre>local/targets                     # claude,codex,gemini
+local/AGNOSTIC_AI.md              # appended after the shared agreements
+local/skills/work-notes/SKILL.md  # a private skill
+local/agents/reviewer.md          # replaces the shared reviewer</pre>
+<p>To switch a shared skill, agent, or hook off, copy it into <code>local/</code> and add <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
+
+<h2>Update</h2>
+<pre>git -C ~/.agnostic-ai pull --ff-only &amp;&amp; ~/.agnostic-ai/sync.sh</pre>
+<p>New shared skills arrive with the pull. For each local replacement, diff the shared file and merge what you want.</p>
+
+<h2>For agents</h2>
+<ol class="steps">
+  <li>Read <a href="llms.txt">llms.txt</a> for the map of this repo.</li>
+  <li>Follow <a href="https://github.com/Chemaclass/agnostic-ai-home/blob/main/SETUP.md">SETUP.md</a> to install. It stops only where the user must decide.</li>
+  <li>Use <a href="https://agnostic-ai.org/llms.txt">agnostic-ai's llms.txt</a> for spec fields and per-tool behavior.</li>
+</ol>
+
+<footer>
+  <p class="stamp">Write it once. Sync it everywhere.</p>
+  <p>MIT licensed. Built on <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
+</footer>
+
+</main>
+<script>
+document.querySelectorAll("button.copy").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var text = document.getElementById(button.dataset.copy).textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      button.textContent = "Copied";
+      setTimeout(function () { button.textContent = "Copy"; }, 1500);
+    });
+  });
+});
+</script>
+</body>
+</html>
