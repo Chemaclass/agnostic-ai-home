@@ -35,9 +35,11 @@ Put your changes in `~/.agnostic-ai/local/`. It is gitignored but still synced, 
 ```text
 ~/.agnostic-ai/local/targets              # tools to sync, e.g. claude,codex,gemini
 ~/.agnostic-ai/local/AGNOSTIC_AI.md       # extra agreements
-~/.agnostic-ai/local/skills/<name>/       # add a skill, or replace a shared one
-~/.agnostic-ai/local/agents/<name>.md     # add an agent, or replace a shared one
+~/.agnostic-ai/local/skills/<name>/       # add a skill, or edit a shared one
+~/.agnostic-ai/local/agents/<name>.md     # add an agent, or edit a shared one
 ```
+
+A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.69.0 or later.
 
 [SETUP.md](SETUP.md) covers collisions, switching specs off, and updates.
 
