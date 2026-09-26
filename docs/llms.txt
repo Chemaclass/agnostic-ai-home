@@ -16,7 +16,7 @@ To install for a user, clone https://github.com/Chemaclass/agnostic-ai-home and 
 
 - [AGNOSTIC_AI.md](https://github.com/Chemaclass/agnostic-ai-home/blob/main/AGNOSTIC_AI.md): the working agreements, emitted as each tool's global instructions file.
 - [skills/](https://github.com/Chemaclass/agnostic-ai-home/tree/main/skills): `gh-issue`, `gh-issues` (manual), `pr-value-audit` (manual), `object-design`, `recovery-evidence`, `agnostic-ai-specs`, `i-have-adhd` (manual). Manual skills set `disable-model-invocation: true` and `x-codex.policy.allow_implicit_invocation: false`.
-- [agents/](https://github.com/Chemaclass/agnostic-ai-home/tree/main/agents): `locator`, `claim-verifier`, `reviewer`. All `readonly: true`, with per-target `model` and `effort` maps.
+- [agents/](https://github.com/Chemaclass/agnostic-ai-home/tree/main/agents): `locator`, `claim-verifier`, `reviewer`. All `readonly: true`, with per-target `model` and `effort` maps. `tools` sits under `x-claude`, the only target of the three that reads it.
 - [hooks/](https://github.com/Chemaclass/agnostic-ai-home/tree/main/hooks): `guard-shell.yaml` (`PreToolUse`, claude and codex) and `guard-shell-cursor.yaml` (`beforeShellExecution`, cursor). Sync does not translate event names, so each tool gets its own spec.
 - [scripts/guard-shell.py](https://github.com/Chemaclass/agnostic-ai-home/blob/main/scripts/guard-shell.py): the hook. Exit 2 with a reason on stderr for Claude and Codex; a `{"permission": ...}` JSON reply for Cursor.
 
