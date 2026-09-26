@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+try { var saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved; } catch (e) {}
+</script>
 <style>
 :root {
   --bg: #f8f6f0; --surface: #fffdf8; --fg: #1b1c19; --muted: #5f5d56; --line: #e3dfd3; --line-strong: #cfc9b8;
@@ -27,11 +30,35 @@
     color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+  --bg: #121411; --surface: #191b18; --fg: #e9e7df; --muted: #a3a097; --line: #2a2d28; --line-strong: #3a3e37;
+  --accent: #82c9a2; --accent-ink: #0f1a14; --accent-soft: #1d2b23; --code: #1d201c;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 3px 8px -3px rgb(0 0 0 / 0.5);
+  color-scheme: dark;
+}
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--line-strong) transparent; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.65 var(--sans); caret-color: var(--accent); }
 ::selection { background: var(--accent-soft); color: var(--fg); }
-main { max-width: 1120px; margin: 0 auto; padding: 64px 24px 88px; }
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+.topbar-inner { max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 28px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; color: var(--fg); text-decoration: none; white-space: nowrap; }
+.brand-mark { width: 22px; height: 22px; color: var(--accent); flex: none; }
+.sections { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 0.9rem; }
+.sections a { display: block; padding: 6px 10px; border-radius: 7px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 150ms, background-color 150ms; }
+.sections a:hover { color: var(--fg); background: var(--code); }
+.sections a[aria-current="true"] { color: var(--accent); background: var(--accent-soft); }
+.topbar-end { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.icon-link { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; color: var(--muted); }
+.icon-link:hover { color: var(--fg); background: var(--code); }
+.icon-link svg { width: 20px; height: 20px; }
+.theme { display: flex; padding: 3px; gap: 2px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.theme button { display: grid; place-items: center; width: 30px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; transition: color 150ms, background-color 150ms; }
+.theme button:hover { color: var(--fg); }
+.theme button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.theme svg { width: 16px; height: 16px; }
+h2[id] { scroll-margin-top: 84px; }
+main { max-width: 1120px; margin: 0 auto; padding: 72px 24px 88px; }
 p, li { overflow-wrap: anywhere; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 h1, h2, h3 { text-wrap: balance; }
@@ -50,7 +77,7 @@ pre { margin: 0; overflow-x: auto; line-height: 1.6; tab-size: 2; }
 .muted { color: var(--muted); }
 
 .hero { display: grid; gap: 40px; align-items: center; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
-nav { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 26px; font-size: 0.95rem; font-weight: 500; }
+.hero nav { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 26px; font-size: 0.95rem; font-weight: 500; }
 .prompt { background: var(--surface); border: 1px solid var(--line-strong); border-radius: 14px; padding: 24px; box-shadow: var(--shadow); }
 .prompt h2 { margin: 0 0 4px; font-size: 1.15rem; letter-spacing: -0.01em; }
 .prompt-body { position: relative; margin: 14px 0 12px; background: var(--code); border: 1px solid var(--line); border-radius: 8px; }
@@ -97,6 +124,8 @@ footer p.muted { margin: 0; font-size: 0.92rem; }
 
 @media (max-width: 860px) {
   main { padding: 40px 16px 64px; }
+  .topbar-inner { padding: 0 16px; gap: 12px; }
+  .sections { display: none; }
   .hero, .split { grid-template-columns: minmax(0, 1fr); }
   .hero { gap: 28px; }
   .lede { max-width: none; }
@@ -104,16 +133,36 @@ footer p.muted { margin: 0; font-size: 0.92rem; }
   .diagram { padding: 14px; overflow-x: auto; }
   .diagram svg { min-width: 640px; }
 }
-@media (prefers-reduced-motion: reduce) { button.copy { transition: none; } }
+@media (prefers-reduced-motion: reduce) { button.copy, .sections a, .theme button { transition: none; } html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
 </style>
 </head>
 <body>
-<main>
+<nav class="topbar" aria-label="Site">
+  <div class="topbar-inner">
+    <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>agnostic-ai home</a>
+    <ul class="sections">
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#native-files">Native files</a></li>
+      <li><a href="#make-it-yours">Make it yours</a></li>
+      <li><a href="#for-agents">For agents</a></li>
+    </ul>
+    <div class="topbar-end">
+      <div class="theme" role="group" aria-label="Theme">
+        <button type="button" data-theme-choice="system" aria-label="System theme" title="System"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button>
+        <button type="button" data-theme-choice="light" aria-label="Light theme" title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+        <button type="button" data-theme-choice="dark" aria-label="Dark theme" title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      </div>
+      <a class="icon-link" href="https://github.com/Chemaclass/agnostic-ai-home" aria-label="GitHub repository"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a>
+    </div>
+  </div>
+</nav>
+<main id="top">
 
 <header class="hero">
   <div>
-    <h1>agnostic-ai home</h1>
-    <p class="lede">A global setup for AI coding agents. Written once in <code>~/.agnostic-ai</code>, synced to Claude Code, Codex, and Cursor in each one's native format by <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
+    <h1>One setup for every coding agent.</h1>
+    <p class="lede">Written once in <code>~/.agnostic-ai</code>, synced to Claude Code, Codex, and Cursor in each one's native format by <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
     <nav aria-label="Project links">
       <a href="https://github.com/Chemaclass/agnostic-ai-home">Repository</a>
       <a href="https://github.com/Chemaclass/agnostic-ai-home/blob/main/SETUP.md">SETUP.md</a>
@@ -133,7 +182,7 @@ footer p.muted { margin: 0; font-size: 0.92rem; }
   </section>
 </header>
 
-<h2>How it works</h2>
+<h2 id="how-it-works">How it works</h2>
 <div class="prose">
   <p>Your clone holds everything. <code>~/.agnostic-ai</code> is a symlink to it, so both paths point at the same files. Your own changes go in <code>~/.agnostic-ai/local/</code>, a gitignored folder inside the clone.</p>
 </div>
@@ -181,7 +230,7 @@ footer p.muted { margin: 0; font-size: 0.92rem; }
   </svg>
 </div>
 
-<h2>One spec, three native files</h2>
+<h2 id="native-files">One spec, three native files</h2>
 <p class="prose">Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. A field a tool cannot honor is dropped with a note at sync time, never silently.</p>
 <div class="split">
   <div class="file">
@@ -215,7 +264,7 @@ sandbox_mode = "read-only"</pre>
   </div>
 </div>
 
-<h2>Where each source lands</h2>
+<h2 id="where-it-lands">Where each source lands</h2>
 <div class="table-wrap">
 <table>
   <thead><tr><th>Source</th><th>Claude Code</th><th>Codex</th><th>Cursor</th></tr></thead>
@@ -229,7 +278,7 @@ sandbox_mode = "read-only"</pre>
 </div>
 <p class="prose">Text outside the managed block stays yours. Sync records what it owns in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
 
-<h2>Where tools really differ</h2>
+<h2 id="tools-differ">Where tools really differ</h2>
 <p class="prose">Sync never translates hook events. So the shell guard ships as two specs over one script: Claude and Codex share <code>PreToolUse</code>, Cursor needs <code>beforeShellExecution</code> and a JSON reply.</p>
 <div class="pair">
   <div class="file">
@@ -248,7 +297,7 @@ command: "$HOME/.agnostic-ai/scripts/guard-shell.py"</pre>
 </div>
 <p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text.</p>
 
-<h2>Make it yours without forking</h2>
+<h2 id="make-it-yours">Make it yours without forking</h2>
 <p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A file there with the same kind and name as a shared spec replaces it; a new name is added. <code>git pull</code> never conflicts.</p>
 <div class="file tree">
   <div class="file-path"><b>~/.agnostic-ai/local/</b><span>gitignored</span></div>
@@ -259,14 +308,14 @@ agents/reviewer.md           # replaces agents/reviewer.md</pre>
 </div>
 <p class="prose">To switch a shared skill, agent, or hook off, copy it into the same path under <code>local/</code> and add <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
 
-<h2>Update</h2>
+<h2 id="update">Update</h2>
 <div class="file tree">
   <div class="file-path"><b>shell</b><span>any directory</span></div>
 <pre>git -C ~/.agnostic-ai pull --ff-only &amp;&amp; ~/.agnostic-ai/sync.sh</pre>
 </div>
 <p class="prose">New shared skills arrive with the pull. For each local replacement, diff the shared file and merge what you want.</p>
 
-<h2>For agents</h2>
+<h2 id="for-agents">For agents</h2>
 <ol class="steps prose">
   <li>Read <a href="llms.txt">llms.txt</a> for the map of this repo.</li>
   <li>Follow <a href="https://github.com/Chemaclass/agnostic-ai-home/blob/main/SETUP.md">SETUP.md</a> to install. It stops only where the user must decide.</li>
@@ -301,6 +350,31 @@ document.querySelectorAll("button.copy").forEach(function (button) {
     navigator.clipboard.writeText(source.textContent).then(function () { done("Copied"); }, selectText);
   });
 });
+
+var root = document.documentElement;
+var choices = document.querySelectorAll("[data-theme-choice]");
+function showTheme(choice) {
+  choices.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.themeChoice === choice)); });
+}
+showTheme(root.dataset.theme || "system");
+choices.forEach(function (button) {
+  button.addEventListener("click", function () {
+    var choice = button.dataset.themeChoice;
+    if (choice === "system") delete root.dataset.theme; else root.dataset.theme = choice;
+    try { if (choice === "system") localStorage.removeItem("theme"); else localStorage.setItem("theme", choice); } catch (e) {}
+    showTheme(choice);
+  });
+});
+
+var links = Array.prototype.slice.call(document.querySelectorAll(".sections a"));
+var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+function markActive() {
+  var current = null;
+  targets.forEach(function (h, i) { if (h && h.getBoundingClientRect().top < 140) current = i; });
+  links.forEach(function (a, i) { if (i === current) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+}
+window.addEventListener("scroll", markActive, { passive: true });
+markActive();
 </script>
 </body>
 </html>
