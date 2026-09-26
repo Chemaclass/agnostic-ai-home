@@ -36,6 +36,7 @@ Sync writes a managed block into `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, an
 ├── agents/          # read-only subagents
 ├── hooks/           # checks before shell commands
 ├── scripts/         # code the hooks run
+├── local/           # private overrides, gitignored
 └── sync.sh          # sync, or check with --check
 ```
 
@@ -51,7 +52,7 @@ Sync writes a managed block into `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, an
 | `object-design` | move decisions into the objects that own the data |
 | `recovery-evidence` | prove a backup actually restores |
 | `agnostic-ai-specs` | edit agnostic-ai sources without touching generated files |
-| `i-have-adhd` | get output shaped for acting, not reading |
+| `i-have-adhd` | get output shaped for acting, not reading (manual only) |
 
 **Agents.** All read-only, each with its own model for Claude and Codex.
 
@@ -61,25 +62,21 @@ Sync writes a managed block into `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, an
 | `claim-verifier` | prove or refute a claim with evidence | mid |
 | `reviewer` | report defects, one line each | strong |
 
-**Hook.** `guard-shell` blocks force pushes without `--force-with-lease`, recursive `rm` with a glob, printing secret files like `.env`, and em or en dashes in commit messages and `gh` text.
+**Hook.** `guard-shell` (`PreToolUse` for Claude and Codex, `beforeShellExecution` for Cursor) blocks force pushes without `--force-with-lease`, recursive `rm` with a glob, printing secret files like `.env`, and em or en dashes in commit messages and `gh` text.
 
 ## Make it yours
 
 Start with `AGNOSTIC_AI.md`: rewrite anything you disagree with, then delete the skills, agents, or hook checks you will not use.
 
-For things that should not be public, name them `*.local.md`, `*.local.yaml`, or `*.local/`. They are gitignored but still synced.
+For things that should not be public, use `local/`. It is gitignored but still synced. A file there replaces the shared spec with the same kind and name; new names are added.
 
 ```text
-rules/personal.local.md             # extra agreements, appended to the managed block
-skills/work-notes.local/SKILL.md    # a private skill, emitted under its frontmatter name
-agents/my-helper.local.md           # a private agent
-hooks/my-guard.local.yaml           # a private hook
+local/AGNOSTIC_AI.md              # extra agreements, appended to the managed block
+local/skills/work-notes/SKILL.md  # a private skill
+local/agents/reviewer.md          # replaces the shared reviewer
+local/hooks/my-guard.yaml         # a private hook
 ```
 
-A local rule can sharpen a shared one, for example turn "give delegated agents distinct names" into your own naming scheme. Local files never leave your machine, so back them up somewhere private.
+`agnostic-ai list --global` shows which layer each spec comes from. Local files never leave your machine, so back them up somewhere private.
 
 Project rules belong in that project's `.agnostic-ai/`, not here. Skills tied to one CLI's connectors, like a Notion or Slack integration, can stay in that CLI's own skills folder.
-
-## License
-
-MIT, see `LICENSE`. `skills/i-have-adhd` is adapted from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) and keeps its MIT notice in `skills/i-have-adhd/LICENSE`.
