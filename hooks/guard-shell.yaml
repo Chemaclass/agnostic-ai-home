@@ -1,5 +1,6 @@
 name: guard-shell
 description: Block force pushes without a lease, recursive rm with globs, printing secret files, and em or en dashes in published text.
+targets: [claude, codex]
 event: PreToolUse
 matcher: Bash
 command: "$HOME/.agnostic-ai/scripts/guard-shell.py"
