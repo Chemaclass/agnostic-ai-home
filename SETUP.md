@@ -2,7 +2,7 @@
 
 You are setting up this repo as the user's global AI configuration. Follow the steps in order. Stop and ask only where a step says so. macOS and Linux.
 
-The rule behind every step: the clone stays pristine. Never edit, commit, or delete tracked files. Everything the user owns goes in `local/`, which git ignores and sync still reads. That keeps `git pull` conflict-free.
+The rule behind every step: the clone stays pristine. Never edit, commit, or delete tracked files. Everything the user owns goes in `~/.agnostic-ai/local/`: a folder inside the clone that git ignores and sync still reads. That keeps `git pull` conflict-free.
 
 ## 1. Install agnostic-ai
 
@@ -22,7 +22,7 @@ Check `~/.agnostic-ai` first:
 
 - Missing: clone to `~/Code/agnostic-ai-home` (or where the user asks), then `ln -s <clone> ~/.agnostic-ai`.
 - A link to a clone of this repo: run `git -C ~/.agnostic-ai pull --ff-only` and continue.
-- A real directory or another repo: stop. Tell the user what is there and offer to move its specs into `local/` of a fresh clone.
+- A real directory or another repo: stop. Tell the user what is there and offer to move its specs into `local/` inside a fresh clone.
 
 ## 3. Pick the tools
 
@@ -59,17 +59,17 @@ Sync writes a managed block into each tool's global instructions file (`~/.claud
 
 ## Extending with local/
 
-Every file under `local/` mirrors the repo layout. A local spec with the same kind and name replaces the shared one whole; a new name is added.
+`~/.agnostic-ai/local/` mirrors the repo layout. A local spec with the same kind and name replaces the shared one whole; a new name is added.
 
 ```text
-local/targets                     # tools to sync, comma-separated
-local/AGNOSTIC_AI.md              # extra agreements, appended after the shared ones
-local/skills/<name>/SKILL.md      # a private skill, or a replacement
-local/agents/<name>.md            # a private agent, or a replacement (other models, for example)
-local/hooks/<name>.yaml           # a private hook, or a replacement
+~/.agnostic-ai/local/targets                 # tools to sync, comma-separated
+~/.agnostic-ai/local/AGNOSTIC_AI.md          # appended after the shared agreements
+~/.agnostic-ai/local/skills/<name>/SKILL.md  # a private skill, or replaces skills/<name>/
+~/.agnostic-ai/local/agents/<name>.md        # a private agent, or replaces agents/<name>.md
+~/.agnostic-ai/local/hooks/<name>.yaml       # a private hook, or replaces hooks/<name>.yaml
 ```
 
-- To change a shared spec, copy it into `local/` first, then edit the copy.
+- To change a shared spec, copy it to the same path under `local/`, then edit the copy.
 - To switch a shared skill, agent, or hook off, copy it into `local/` and add `targets-exclude: [<every synced target>]` to its frontmatter.
 - To change a shared agreement, add the replacement to `local/AGNOSTIC_AI.md` and say it overrides the shared one.
 

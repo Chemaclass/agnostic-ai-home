@@ -82,28 +82,31 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line);
 </section>
 
 <h2>How it works</h2>
-<p>One git clone is the source. A symlink makes it the agnostic-ai home. Sync reads the shared specs plus your private <code>local/</code> layer and writes real files into each tool.</p>
+<p>Your clone holds everything. <code>~/.agnostic-ai</code> is a symlink to it, so both paths point at the same files. Your own changes go in <code>~/.agnostic-ai/local/</code>, a gitignored folder inside the clone.</p>
+<pre>~/Code/agnostic-ai-home/          # your clone; ~/.agnostic-ai links here
+├── AGNOSTIC_AI.md                # shared, tracked by git
+├── skills/ agents/ hooks/        # shared, tracked by git
+└── local/                        # yours: gitignored, still synced</pre>
+<p>Sync reads both layers through the link and writes real files into each tool.</p>
 <div class="card diagram">
   <svg viewBox="0 0 820 330" role="img" aria-labelledby="dia-title">
-    <title id="dia-title">The clone is linked to ~/.agnostic-ai; sync merges shared specs with local/ and writes native files for Claude Code, Codex, and Cursor.</title>
+    <title id="dia-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh runs agnostic-ai sync --global and writes native files for Claude Code, Codex, and Cursor.</title>
     <defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
-    <rect class="box" x="10" y="30" width="230" height="120" rx="8"/>
-    <text x="24" y="56" font-size="14" font-weight="700">git clone</text>
-    <text x="24" y="80" font-size="12" class="dim">~/Code/agnostic-ai-home</text>
-    <text x="24" y="104" font-size="12">AGNOSTIC_AI.md  skills/</text>
-    <text x="24" y="124" font-size="12">agents/  hooks/  scripts/</text>
-    <rect class="box dash" x="10" y="180" width="230" height="110" rx="8"/>
-    <text x="24" y="206" font-size="14" font-weight="700">local/</text>
-    <text x="24" y="230" font-size="12" class="dim">gitignored, still synced</text>
-    <text x="24" y="254" font-size="12">targets  AGNOSTIC_AI.md</text>
-    <text x="24" y="274" font-size="12">skills/ agents/ hooks/</text>
-    <rect class="hi" x="290" y="115" width="210" height="90" rx="8"/>
-    <text x="306" y="142" font-size="14" font-weight="700">~/.agnostic-ai</text>
-    <text x="306" y="166" font-size="12" class="dim">symlink to the clone</text>
-    <text x="306" y="190" font-size="12">sync.sh</text>
-    <path class="arrow" d="M240,90 C265,90 265,140 286,140"/>
-    <path class="arrow dash" d="M240,235 C265,235 265,180 286,180"/>
-    <text x="306" y="228" font-size="11" class="dim">agnostic-ai sync --global</text>
+    <rect class="hi" x="10" y="20" width="330" height="290" rx="8"/>
+    <text x="26" y="48" font-size="15" font-weight="700">~/.agnostic-ai</text>
+    <text x="26" y="70" font-size="12" class="dim">symlink to ~/Code/agnostic-ai-home</text>
+    <text x="26" y="104" font-size="12" class="dim">shared, tracked by git</text>
+    <text x="26" y="126" font-size="12">AGNOSTIC_AI.md  sync.sh</text>
+    <text x="26" y="146" font-size="12">skills/  agents/  hooks/</text>
+    <rect class="box dash" x="26" y="182" width="298" height="112" rx="8"/>
+    <text x="42" y="208" font-size="14" font-weight="700">local/</text>
+    <text x="42" y="230" font-size="12" class="dim">yours: gitignored, still synced</text>
+    <text x="42" y="254" font-size="12">targets  AGNOSTIC_AI.md</text>
+    <text x="42" y="274" font-size="12">skills/  agents/  hooks/</text>
+    <rect class="box" x="372" y="135" width="190" height="60" rx="8"/>
+    <text x="386" y="160" font-size="13" font-weight="700">sync.sh</text>
+    <text x="386" y="180" font-size="11" class="dim">agnostic-ai sync --global</text>
+    <path class="arrow" d="M340,165 L368,165"/>
     <rect class="box" x="598" y="20" width="214" height="84" rx="8"/>
     <text x="612" y="46" font-size="14" font-weight="700">Claude Code</text>
     <text x="612" y="68" font-size="11">~/.claude/CLAUDE.md</text>
@@ -116,9 +119,9 @@ footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line);
     <text x="612" y="252" font-size="14" font-weight="700">Cursor</text>
     <text x="612" y="274" font-size="11">~/.cursor/AGENTS.md</text>
     <text x="612" y="292" font-size="11" class="dim">skills/ agents/ hooks.json</text>
-    <path class="arrow" d="M500,140 C560,140 560,62 594,62"/>
-    <path class="arrow" d="M500,160 L594,165"/>
-    <path class="arrow" d="M500,180 C560,180 560,268 594,268"/>
+    <path class="arrow" d="M562,150 C580,150 575,62 594,62"/>
+    <path class="arrow" d="M562,165 L594,165"/>
+    <path class="arrow" d="M562,180 C580,180 575,268 594,268"/>
   </svg>
 </div>
 
@@ -171,12 +174,12 @@ command: "$HOME/.agnostic-ai/scripts/guard-shell.py"</pre></div>
 <p>It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text.</p>
 
 <h2>Make it yours without forking</h2>
-<p>Never edit tracked files. Put your changes in <code>local/</code>. A local spec with the same kind and name replaces the shared one; a new name is added. <code>git pull</code> never conflicts.</p>
-<pre>local/targets                     # claude,codex,gemini
-local/AGNOSTIC_AI.md              # appended after the shared agreements
-local/skills/work-notes/SKILL.md  # a private skill
-local/agents/reviewer.md          # replaces the shared reviewer</pre>
-<p>To switch a shared skill, agent, or hook off, copy it into <code>local/</code> and add <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
+<p>Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A file there with the same kind and name as a shared spec replaces it; a new name is added. <code>git pull</code> never conflicts.</p>
+<pre>~/.agnostic-ai/local/targets                     # claude,codex,gemini
+~/.agnostic-ai/local/AGNOSTIC_AI.md              # appended after the shared agreements
+~/.agnostic-ai/local/skills/work-notes/SKILL.md  # a private skill
+~/.agnostic-ai/local/agents/reviewer.md          # replaces agents/reviewer.md</pre>
+<p>To switch a shared skill, agent, or hook off, copy it into the same path under <code>local/</code> and add <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
 
 <h2>Update</h2>
 <pre>git -C ~/.agnostic-ai pull --ff-only &amp;&amp; ~/.agnostic-ai/sync.sh</pre>

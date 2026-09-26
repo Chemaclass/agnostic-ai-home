@@ -1,16 +1,16 @@
 # agnostic-ai home
 
-> A global configuration for AI coding agents, kept in one git clone linked to `~/.agnostic-ai`. `agnostic-ai sync --global` writes it to Claude Code, Codex, and Cursor (and any other supported tool listed in `local/targets`) in each tool's native format. Personal changes live in the gitignored `local/` layer, so the clone stays pristine and `git pull` never conflicts.
+> A global configuration for AI coding agents, kept in one git clone linked to `~/.agnostic-ai`. `agnostic-ai sync --global` writes it to Claude Code, Codex, and Cursor (and any other supported tool listed in `~/.agnostic-ai/local/targets`) in each tool's native format. Personal changes live in `~/.agnostic-ai/local/`, a gitignored folder inside the clone, so the clone stays pristine and `git pull` never conflicts.
 
 This repo is a working example of an agnostic-ai global home: working agreements, skills, read-only agents, and a shell guard hook, with per-tool values where tools differ.
 
-To install for a user, clone https://github.com/Chemaclass/agnostic-ai-home and follow SETUP.md in order. Never edit tracked files; put user changes in `local/`.
+To install for a user, clone https://github.com/Chemaclass/agnostic-ai-home and follow SETUP.md in order. Never edit tracked files; put user changes in `~/.agnostic-ai/local/`.
 
 ## Start here
 
 - [SETUP.md](https://github.com/Chemaclass/agnostic-ai-home/blob/main/SETUP.md): the agent procedure. Install agnostic-ai, clone and link, detect tools, resolve collisions, sync, verify, extend with `local/`, update.
 - [README.md](https://github.com/Chemaclass/agnostic-ai-home/blob/main/README.md): what ships and the manual quick start.
-- [sync.sh](https://github.com/Chemaclass/agnostic-ai-home/blob/main/sync.sh): runs `agnostic-ai sync --global --only <targets>`, reading targets from `local/targets` (default `claude,codex,cursor`). As a git pre-commit hook it runs `--check`.
+- [sync.sh](https://github.com/Chemaclass/agnostic-ai-home/blob/main/sync.sh): runs `agnostic-ai sync --global --only <targets>`, reading targets from `~/.agnostic-ai/local/targets` (default `claude,codex,cursor`). As a git pre-commit hook it runs `--check`.
 
 ## Specs
 
@@ -22,10 +22,12 @@ To install for a user, clone https://github.com/Chemaclass/agnostic-ai-home and 
 
 ## Local layer
 
+All paths are under `~/.agnostic-ai/` (the clone, through the symlink). `local/` mirrors the repo layout.
+
 - `local/targets`: comma-separated agnostic-ai target names to sync.
 - `local/AGNOSTIC_AI.md`: appended after the shared agreements.
 - `local/skills/<name>/SKILL.md`, `local/agents/<name>.md`, `local/hooks/<name>.yaml`: a same-name file replaces the shared spec whole; a new name is added.
-- Switch a shared spec off by copying it into `local/` with `targets-exclude: [<every synced target>]`.
+- Switch a shared spec off by copying it to the same path under `local/` with `targets-exclude: [<every synced target>]`.
 - `agnostic-ai list --global` shows each spec's layer (`global` or `global-local`).
 
 ## agnostic-ai
