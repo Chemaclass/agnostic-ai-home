@@ -7,7 +7,14 @@ Working agreements, skills, agents, and a safety hook. Use it as is, fork it, or
 ## Quick start
 
 1. [Install agnostic-ai](https://agnostic-ai.org/docs/installation/).
-2. Clone this repo to `~/.agnostic-ai`, or point `AGNOSTIC_AI_HOME` at your clone.
+2. Clone this repo anywhere and link it to `~/.agnostic-ai`:
+
+   ```bash
+   git clone https://github.com/Chemaclass/agnostic-ai-home.git ~/Code/agnostic-ai-home
+   ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
+   ```
+
+   Sync reads `~/.agnostic-ai`, and the hook runs from `~/.agnostic-ai/scripts/`. Edit and commit in your clone. Changes go live on the next sync.
 3. List the CLIs you use in `sync.sh`.
 4. Sync and install the drift check:
 
