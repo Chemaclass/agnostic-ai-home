@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/index.html"
+        ],
+        "createdAt": "2026-09-26T12:12:06.739Z",
+        "reason": "Claude triage: .table-wrap only wraps a table whose th/td carry 12px 16px padding; detector sees the wrapper, not the cells"
+      }
+    ]
+  }
+}
