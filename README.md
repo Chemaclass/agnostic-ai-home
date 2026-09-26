@@ -4,6 +4,8 @@ A global setup for AI coding CLIs, written once and synced to Claude Code, Codex
 
 Working agreements, skills, agents, and a safety hook. Use it as is, fork it, or take what you like.
 
+See how it fits together on the [project page](https://chemaclass.github.io/agnostic-ai-home/). Agents can start from its [llms.txt](https://chemaclass.github.io/agnostic-ai-home/llms.txt).
+
 ## Quick start
 
 Paste this into Claude Code, Codex, Cursor, or any coding agent:
