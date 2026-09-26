@@ -3,7 +3,6 @@ name: gh-issues
 description: "Work through a repository's ready GitHub issues one at a time, each through gh-issue and its own PR. Use when asked to work the backlog, the queue, or all open issues."
 argument-hint: "[--limit N] [--milestone M] [--label L] [--dry-run]"
 disable-model-invocation: true
-
 x-codex:
   policy:
     allow_implicit_invocation: false

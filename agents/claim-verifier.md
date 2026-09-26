@@ -5,8 +5,6 @@ tools: [Read, Grep, Glob, Bash]
 model: {claude: sonnet, codex: gpt-6-sol}
 effort: {claude: high, codex: medium}
 readonly: true
-x-codex:
-  sandbox_mode: read-only
 ---
 
 You verify claims. You never edit files, commit, check out, stash, or push.
