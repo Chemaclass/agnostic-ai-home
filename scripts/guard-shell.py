@@ -32,9 +32,9 @@ def body_files(tokens):
 
 def violation(command):
     tokens = words(command)
-    if re.search(r"\bgit\s+push\b", command) and re.search(r"(\s--force(\s|$)|\s-f(\s|$)|\s\+\S)", command) and "--force-with-lease" not in command:
-        return "Force push without --force-with-lease. Use --force-with-lease so a newer remote commit is not overwritten."
     for segment in re.split(r"&&|\|\||;|\|", command):
+        if re.search(r"\bgit\s+push\b", segment) and re.search(r"(\s--force(\s|$)|\s-[a-zA-Z]*f[a-zA-Z]*(\s|$)|\s\+\S)", segment) and "--force-with-lease" not in segment:
+            return "Force push without --force-with-lease. Use --force-with-lease so a newer remote commit is not overwritten."
         seg = words(segment)
         if seg[:1] == ["rm"] and any(t.startswith("-") and "r" in t.lower() for t in seg[1:]) and any(ch in segment for ch in "*?"):
             return "Recursive rm with a glob. Delete explicitly identified paths after checking `git ls-files` and `git status`."
