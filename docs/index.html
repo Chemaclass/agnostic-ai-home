@@ -310,10 +310,10 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
     <div class="file-path"><b>agents/locator.md</b><span>source</span></div>
 <pre><span class="c">---</span>
 <span class="k">name:</span> locator
-<span class="k">tools:</span> [Read, Grep, Glob, Bash]
 <span class="k">model:</span> {<span class="k">claude:</span> haiku, <span class="k">codex:</span> gpt-6-luna}
 <span class="k">effort:</span> {<span class="k">claude:</span> low, <span class="k">codex:</span> low}
 <span class="k">readonly:</span> true
+<span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob, Bash]}
 <span class="c">---</span>
 You find code. You never edit files...</pre>
   </div>
