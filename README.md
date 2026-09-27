@@ -43,4 +43,4 @@ A same-name local spec merges into the shared one: write only the fields that ch
 
 [SETUP.md](SETUP.md) covers collisions, switching specs off, and updates.
 
-Working on this repo? Install the drift check: `ln -sf ../../sync.sh .git/hooks/pre-commit`.
+Working on this repo? Install the pre-commit gate (guard tests, spec lint, dashes, drift): `ln -sf ../../sync.sh .git/hooks/pre-commit`. Run it anytime with `scripts/check.sh`; the `check` workflow runs it on demand in GitHub Actions.
