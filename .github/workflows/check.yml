@@ -1,0 +1,22 @@
+name: check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npm install -g agnostic-ai
+      - run: ./scripts/check.sh
+      - name: Sync into a clean home
+        run: |
+          export HOME="$RUNNER_TEMP/home"
+          mkdir -p "$HOME"
+          ln -s "$GITHUB_WORKSPACE" "$HOME/.agnostic-ai"
+          ./sync.sh
+          ./sync.sh --check

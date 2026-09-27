@@ -7,7 +7,7 @@ import shlex
 import sys
 
 PUBLISHING = re.compile(r"\b(git\s+(commit|tag)|gh\s+(pr|issue|release)\s+(create|comment|edit|review))\b")
-DASHES = ("—", "–")
+DASHES = ("\u2014", "\u2013")
 SECRET_READERS = {"cat", "less", "more", "head", "tail", "bat", "strings", "xxd", "base64"}
 SECRET_PATH = re.compile(r"(^|/)(\.env(?!\.(example|sample|dist|template)$)(\.[\w.-]+)?|id_(rsa|ed25519|ecdsa)[^/]*|auth\.json|credentials[^/]*|\.npmrc|\.pypirc|\.netrc)$")
 
