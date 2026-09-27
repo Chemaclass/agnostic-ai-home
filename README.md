@@ -23,7 +23,7 @@ Restart open sessions. Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai
 
 ## What you get
 
-- **Agreements** (`AGNOSTIC_AI.md`): finish the work, slice vertically, validate once, write plainly.
+- **Agreements** (`AGNOSTIC_AI.md`): finish the work, slice vertically, fix root causes, validate once, write plainly.
 - **Skills**: `gh-issue`, `gh-issues`, `pr-value-audit`, `object-design`, `recovery-evidence`, `agnostic-ai-specs`, `i-have-adhd`.
 - **Agents**, all read-only: `locator` (cheap), `claim-verifier` (mid), `reviewer` (strong).
 - **Hook** `guard-shell`: blocks unleased force pushes, recursive `rm` with a glob, printing secret files, and em or en dashes in published text.
