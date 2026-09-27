@@ -47,8 +47,8 @@ gh repo view --json defaultBranchRef -q .defaultBranchRef.name
 
 ## 5. Ship
 
-12. Commit and open the PR with the repo's `commit` and `pr` skills when it has them. Otherwise: a conventional commit subject that says what the change does, `git push -u origin HEAD`, and `gh pr create` with a body covering what and why, decisions worth challenging, how each criterion was verified, and `Closes #<n>`.
-13. Merge only when the repo's rules let you merge your own PR and its required checks are green on the head commit. Otherwise leave it open for review.
+12. Commit and open the PR with the repo's `commit` and `pr` skills when it has them. Otherwise: a conventional commit subject that says what the change does, `git push -u origin HEAD`, and `gh pr create --assignee @me --label <type>` (bug, enhancement, ...) with a body covering what and why, decisions worth challenging, how each criterion was verified, and `Closes #<n>`.
+13. Merge only when the repo's rules let you merge your own PR and its required checks are green on the head commit. Otherwise leave it open for review. When another PR is stacked on this one, run `gh pr edit <stacked> --base <default>` before merging with `--delete-branch`, or GitHub closes the stacked PR.
 14. Report the PR URL, which acceptance criteria you verified, and plainly which you could not.
 
 ## Rules
