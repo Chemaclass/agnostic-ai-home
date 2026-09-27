@@ -74,7 +74,7 @@ Sync writes a managed block into each tool's global instructions file (`~/.claud
 - To switch a shared skill, agent, or hook off, create it under `local/` with `name` and `targets-exclude: [<every synced target>]`. Nothing else to copy.
 - To change a shared agreement, add the replacement to `local/AGNOSTIC_AI.md` and say it overrides the shared one.
 
-Run `~/.agnostic-ai/sync.sh` after every change. `local/` never leaves the machine, so suggest the user back it up privately.
+Run `~/.agnostic-ai/sync.sh` after every change. `local/` never leaves the machine, so suggest the user back it up privately. Rules for one repo belong in that repo, not here: `local/` loads in every session.
 
 ## Updating
 
