@@ -74,7 +74,15 @@ def unleased_force_push(cmd):
     # --force disables the lease check, so it counts even next to --force-with-lease.
     if any(t == "--force" or re.fullmatch(r"-[a-zA-Z]*f[a-zA-Z]*", t) for t in args):
         return True
-    return any(t.startswith("+") for t in args) and not any(t.startswith("--force-with-lease") for t in args)
+    leases = [t[len("--force-with-lease"):] for t in args if t.startswith("--force-with-lease")]
+    if "" in leases:
+        return False
+    leased = {branch(lease.lstrip("=").split(":")[0]) for lease in leases}
+    return any(t.startswith("+") and not {branch(r) for r in t[1:].split(":")} & leased for t in args)
+
+
+def branch(ref):
+    return ref.removeprefix("refs/heads/")
 
 
 def shell_script(cmd):
