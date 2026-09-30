@@ -1,12 +1,12 @@
 ---
 name: gh-issue
-description: "Take one GitHub issue end to end: read it with every comment, branch, implement, verify each acceptance criterion, and open a PR that closes it. Use when asked to work, fix, implement, or pick up a specific issue by number or URL."
+description: "Take one GitHub issue to a PR: read every comment, branch, implement, verify each acceptance criterion. Use when asked to work, fix, or pick up an issue by number or URL."
 argument-hint: "[issue-number or URL]"
 ---
 
 # Work one issue
 
-The repository's own rules win over this skill. Before starting, read its agent instructions (`AGENTS.md`, `CLAUDE.md`, `.agnostic-ai/`) and `CONTRIBUTING.md` for branch naming, validation gates, commit and PR conventions, and merge rules. This skill is the order of operations when the repo is silent.
+The repository's own rules win over this skill. Before starting, read its agent instructions (`AGENTS.md`, `CLAUDE.md`, `.agnostic-ai/`) and `CONTRIBUTING.md` for branch naming, validation gates, commit and PR conventions, and merge rules. If the repo has its own `gh-issue` skill (under `.agnostic-ai/skills/`, `.claude/skills/`, or `.agents/skills/`), read it and follow it where it differs: Claude Code loads this personal copy instead of a project skill with the same name. This skill is the order of operations when the repo is silent.
 
 ## Context
 

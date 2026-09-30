@@ -1,6 +1,6 @@
 ---
 name: agnostic-ai-specs
-description: "Conventions for editing agnostic-ai sources and their generated agent files. Use when changing a `.agnostic-ai/` directory (project or `~/.agnostic-ai`), running `agnostic-ai sync`, or touching generated instruction files such as CLAUDE.md, AGENTS.md, `.cursor/`, or emitted skills."
+description: "Edit agnostic-ai sources, never generated files. Use when changing a `.agnostic-ai/` directory or `~/.agnostic-ai`, running `agnostic-ai sync`, or touching generated CLAUDE.md, AGENTS.md, skills, or agents."
 ---
 
 # agnostic-ai specs
