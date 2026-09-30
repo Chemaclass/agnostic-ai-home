@@ -19,7 +19,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 ~/.agnostic-ai/sync.sh
 ```
 
-Restart open sessions. Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
+Restart open sessions. In Codex, run `/hooks` once and trust `guard-shell`; Codex skips untrusted hooks. Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
 
 ## What you get
 
