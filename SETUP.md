@@ -57,7 +57,7 @@ git -C ~/.agnostic-ai status --short   # must print nothing
 
 Sync writes a managed block into each tool's global instructions file (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, ...) and real files into its skills, agents, and hooks folders. Text outside the managed block stays the user's. Tell the user to restart open sessions.
 
-Codex runs a hook only after the user trusts it. Tell them to open Codex, run `/hooks`, and trust `guard-shell`. Until then Codex skips the guard without a warning. A sync that changes the hook needs a new review.
+Codex runs a hook only after the user trusts it. Tell them to open Codex, run `/hooks`, and trust `guard-shell`. Until then Codex skips the guard without a warning. When a sync changes the hook entry in `~/.codex/hooks.json`, trust it again.
 
 ## Extending with local/
 
