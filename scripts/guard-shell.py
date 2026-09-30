@@ -30,13 +30,34 @@ def body_files(tokens):
             yield value
 
 
+def program(seg):
+    """The command a segment runs, past sudo, command, env, and VAR=value prefixes."""
+    for token in seg:
+        name = os.path.basename(token)
+        if name in ("sudo", "command", "env", "exec") or "=" in token and not token.startswith("-"):
+            continue
+        return name
+    return ""
+
+
+def unleased_force_push(seg):
+    if program(seg) != "git" or "push" not in seg:
+        return False
+    args = seg[seg.index("push") + 1:]
+    # --force disables the lease check, so it counts even next to --force-with-lease.
+    if any(t == "--force" or re.fullmatch(r"-[a-zA-Z]*f[a-zA-Z]*", t) for t in args):
+        return True
+    return any(t.startswith("+") for t in args) and not any(t.startswith("--force-with-lease") for t in args)
+
+
 def violation(command):
     tokens = words(command)
     for segment in re.split(r"&&|\|\||;|\|", command):
-        if re.search(r"\bgit\s+push\b", segment) and re.search(r"(\s--force(\s|$)|\s-[a-zA-Z]*f[a-zA-Z]*(\s|$)|\s\+\S)", segment) and "--force-with-lease" not in segment:
-            return "Force push without --force-with-lease. Use --force-with-lease so a newer remote commit is not overwritten."
         seg = words(segment)
-        if seg[:1] == ["rm"] and any(t.startswith("-") and "r" in t.lower() for t in seg[1:]) and any(ch in segment for ch in "*?"):
+        textual = re.search(r"\bgit\s+push\b", segment) and re.search(r"(\s--force(\s|$)|\s-[a-zA-Z]*f[a-zA-Z]*(\s|$)|\s\+\S)", segment) and "--force-with-lease" not in segment
+        if textual or unleased_force_push(seg):
+            return "Force push without --force-with-lease. Use --force-with-lease so a newer remote commit is not overwritten."
+        if program(seg) == "rm" and any(t.startswith("-") and "r" in t.lower() for t in seg[1:]) and any(ch in segment for ch in "*?"):
             return "Recursive rm with a glob. Delete explicitly identified paths after checking `git ls-files` and `git status`."
         if seg and os.path.basename(seg[0]) in SECRET_READERS and any(SECRET_PATH.search(t) for t in seg[1:]):
             return "This would print a secret file. Copy secrets between private files without printing them."
