@@ -313,14 +313,14 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 <span class="k">model:</span> {<span class="k">claude:</span> haiku, <span class="k">codex:</span> gpt-6-luna}
 <span class="k">effort:</span> {<span class="k">claude:</span> low, <span class="k">codex:</span> low}
 <span class="k">readonly:</span> true
-<span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob, Bash]}
+<span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob]}
 <span class="c">---</span>
 You find code. You never edit files...</pre>
   </div>
   <div class="stack">
     <div class="file">
       <div class="file-path"><b>~/.claude/agents/locator.md</b><span>Claude Code</span></div>
-<pre><span class="k">tools:</span> [Read, Grep, Glob, Bash]
+<pre><span class="k">tools:</span> [Read, Grep, Glob]
 <span class="k">model:</span> haiku
 <span class="k">effort:</span> low</pre>
     </div>
@@ -354,7 +354,7 @@ You find code. You never edit files...</pre>
 <span class="k">command:</span> <span class="s">"$HOME/.agnostic-ai/scripts/guard-shell.py"</span></pre>
   </div>
 </div>
-<p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text.</p>
+<p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text. Codex runs it only after you trust it once in <code>/hooks</code>.</p>
 
 <h2 id="make-it-yours">Make it yours without forking</h2>
 <p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A new name is added. A file with the same kind and name as a shared spec merges into it: write only the fields that change, and a <code>::parent</code> line to extend the body. <code>git pull</code> never conflicts.</p>

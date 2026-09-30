@@ -1,6 +1,6 @@
 ---
 name: recovery-evidence
-description: "Rules for proving backups and handling recovery secrets. Use when setting up, auditing, or claiming a backup works; restoring data; rotating or storing encryption passwords, salts, or private keys; or moving recovery material into a password manager or other durable destination."
+description: "Rules for proving backups and handling recovery secrets. Use when setting up, auditing, restoring, or claiming a backup works, or when storing encryption passwords, salts, or private keys."
 ---
 
 # Recovery evidence
