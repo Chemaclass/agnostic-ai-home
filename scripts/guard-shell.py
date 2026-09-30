@@ -78,7 +78,8 @@ def unleased_force_push(cmd):
     if "" in leases:
         return False
     leased = {branch(lease.lstrip("=").split(":")[0]) for lease in leases}
-    return any(t.startswith("+") and not {branch(r) for r in t[1:].split(":")} & leased for t in args)
+    # A lease protects the remote ref, so it must name the refspec destination.
+    return any(t.startswith("+") and branch(t[1:].split(":")[-1]) not in leased for t in args)
 
 
 def branch(ref):
