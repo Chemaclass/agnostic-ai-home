@@ -39,7 +39,7 @@ Put your changes in `~/.agnostic-ai/local/`. It is gitignored but still synced, 
 ~/.agnostic-ai/local/agents/<name>.md     # add an agent, or edit a shared one
 ```
 
-A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.69.0 or later.
+A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.76.x, which `sync.sh` checks.
 
 [SETUP.md](SETUP.md) covers collisions, switching specs off, and updates.
 

@@ -3,10 +3,12 @@
 set -e
 home="$HOME/.agnostic-ai"
 [ -d "$home" ] || { echo "sync.sh: $home is missing. Link it to your clone: ln -s <clone> $home" >&2; exit 1; }
-min=0.69.0
+series=0.76
 version=$(agnostic-ai --version 2>/dev/null | awk '{print $NF}')
-echo "$version" | awk -F. -v min="$min" '{split(min, m, "."); for (i = 1; i <= 3; i++) { if ($i + 0 != m[i] + 0) exit ($i + 0 < m[i] + 0) } }' && [ -n "$version" ] \
-  || { echo "sync.sh: needs agnostic-ai $min or later (found ${version:-none}). Run: agnostic-ai upgrade" >&2; exit 1; }
+case "$version" in
+  "$series".*) ;;
+  *) echo "sync.sh: needs agnostic-ai $series.x (found ${version:-none}). Run: agnostic-ai upgrade --version v$series.0" >&2; exit 1 ;;
+esac
 targets=claude,codex,cursor
 [ -f "$home/local/targets" ] && targets=$(tr -d ' \n' < "$home/local/targets")
 if [ "$(basename "$0")" = pre-commit ]; then
