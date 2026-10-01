@@ -10,7 +10,7 @@ x-codex:
 
 # Work the queue
 
-Process open issues that are unassigned or assigned to you, each through the `gh-issue` skill, each ending in its own PR. The repository's own rules win over this skill. If the repo has its own `gh-issues` skill (under `.agnostic-ai/skills/`, `.claude/skills/`, or `.agents/skills/`), read it and follow it where it differs.
+Process open issues that are unassigned or assigned to you, each through the `gh-issue` skill, each ending in its own PR. The repository's own rules win over this skill. If the repo has its own queue skill, named `gh-issues` or with a project prefix such as `phel-gh-issues` (under `.agnostic-ai/skills/`, `.claude/skills/`, or `.agents/skills/`), read it and follow it where it differs. Use the repo's issue skill the same way.
 
 ## Args
 
