@@ -6,7 +6,7 @@ argument-hint: "[issue-number or URL]"
 
 # Work one issue
 
-The repository's own rules win over this skill. Before starting, read its agent instructions (`AGENTS.md`, `CLAUDE.md`, `.agnostic-ai/`) and `CONTRIBUTING.md` for branch naming, validation gates, commit and PR conventions, and merge rules. If the repo has its own `gh-issue` skill (under `.agnostic-ai/skills/`, `.claude/skills/`, or `.agents/skills/`), read it and follow it where it differs: Claude Code loads this personal copy instead of a project skill with the same name. This skill is the order of operations when the repo is silent.
+The repository's own rules win over this skill. Before starting, read its agent instructions (`AGENTS.md`, `CLAUDE.md`, `.agnostic-ai/`) and `CONTRIBUTING.md` for branch naming, validation gates, commit and PR conventions, and merge rules. If the repo has its own issue skill, named `gh-issue` or with a project prefix such as `phel-gh-issue` (under `.agnostic-ai/skills/`, `.claude/skills/`, or `.agents/skills/`), read it and follow it where it differs. A project copy named `gh-issue` is hidden in Claude Code by this personal one, so projects use the prefix. This skill is the order of operations when the repo is silent.
 
 ## Context
 
