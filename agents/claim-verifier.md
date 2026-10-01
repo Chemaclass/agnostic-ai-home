@@ -1,7 +1,7 @@
 ---
 name: claim-verifier
 description: Read-only verifier. Give it factual claims about code, a PR, or a system ("X is reachable today", "this value wins") and a base revision; it returns a verdict per claim with file:line evidence. Use before acting on a PR, issue, or audit that rests on such claims.
-model: {claude: opus, codex: gpt-6-astra}
+model: {claude: opus, codex: gpt-6.1-sol}
 effort: {claude: high, codex: high}
 readonly: true
 x-claude: {tools: [Read, Grep, Glob, Bash]}

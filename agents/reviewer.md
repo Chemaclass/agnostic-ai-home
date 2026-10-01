@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Read-only defect review of a diff, branch, or PR. One line per verified finding, most severe first, no praise or style nits. Use before opening or merging a PR.
-model: {claude: opus, codex: gpt-6-astra}
+model: {claude: opus, codex: gpt-6.1-sol}
 effort: {claude: high, codex: high}
 readonly: true
 x-claude: {tools: [Read, Grep, Glob, Bash]}
