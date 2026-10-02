@@ -55,6 +55,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 
 - Conventional commits, with the repo's type names; its history wins.
 - Never amend or rewrite pushed history.
+- Clean up by default once a PR merges: delete its local branch and worktree, and the remote branch when `--delete-branch` could not (a worktree holding the branch blocks it). Run `git fetch --prune` and `git worktree prune`. Keep a branch with unpushed commits or an open PR, and say so.
 
 ## Code
 
