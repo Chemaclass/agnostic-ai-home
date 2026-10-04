@@ -61,6 +61,17 @@ Sync writes a managed block into each tool's global instructions file (`~/.claud
 
 Codex runs a hook only after the user trusts it. Tell them to open Codex, run `/hooks`, and trust `guard-shell`. Until then Codex skips the guard without a warning. When a sync changes the hook entry in `~/.codex/hooks.json`, trust it again.
 
+## 6. Nightly cleanup (macOS)
+
+Agent tools outlive the worktrees they were started in. Install the launchd job that reaps them every night at 03:30, or on the next wake:
+
+```bash
+cp ~/.agnostic-ai/scripts/launchd/com.chemaclass.reap-stale-agents.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.chemaclass.reap-stale-agents.plist
+```
+
+Run it by hand with `~/.agnostic-ai/scripts/reap-stale-agents.sh` (`--dry-run` to preview). The log is `/tmp/reap-stale-agents.log`.
+
 ## Extending with local/
 
 `~/.agnostic-ai/local/` mirrors the repo layout. A local spec with a new name is added. One with the same kind and name merges into the shared spec: write only what changes.
