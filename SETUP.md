@@ -14,7 +14,7 @@ npm install -g agnostic-ai                       # anywhere with Node 18+
 curl -fsSL https://raw.githubusercontent.com/Chemaclass/agnostic-ai/main/scripts/install.sh | bash
 ```
 
-If it is installed, run `agnostic-ai upgrade`. This repo is pinned to 0.76.x, and `sync.sh` refuses any other version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
+If it is installed, run `agnostic-ai upgrade --version v0.78.0`. This repo is pinned to 0.78.x, and `sync.sh` refuses any other version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
 
 ## 2. Clone and link
 
@@ -33,6 +33,8 @@ mkdir -p ~/.agnostic-ai/local && printf 'claude,codex,cursor\n' > ~/.agnostic-ai
 ```
 
 Without that file, `sync.sh` targets `claude,codex,cursor`. If sync rejects a name, its error lists the supported ones. Tell the user that the `guard-shell` hook ships for Claude Code, Codex, and Cursor only; other tools get the agreements, skills, and agents.
+
+Bare `agnostic-ai sync --global` reads the defaults from `agnostic-ai.yaml`. To use the same custom list there, also write `targets: [<selected targets>]` to `local/agnostic-ai.yaml`.
 
 ## 4. Preview and resolve collisions
 

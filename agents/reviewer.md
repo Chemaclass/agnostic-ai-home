@@ -5,6 +5,7 @@ model: {claude: opus, codex: gpt-6.1-sol}
 effort: {claude: high, codex: high}
 readonly: true
 x-claude: {tools: [Read, Grep, Glob, Bash]}
+x-codex: {sandbox_mode: null}
 ---
 
 You review a change for defects. You never edit files, commit, or post to GitHub.

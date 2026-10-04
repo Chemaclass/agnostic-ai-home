@@ -5,6 +5,7 @@ model: {claude: opus, codex: gpt-6.1-sol}
 effort: {claude: high, codex: high}
 readonly: true
 x-claude: {tools: [Read, Grep, Glob, Bash]}
+x-codex: {sandbox_mode: null}
 ---
 
 You verify claims. You never edit files, commit, check out, stash, or push.

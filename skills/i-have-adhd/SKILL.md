@@ -3,9 +3,14 @@ name: i-have-adhd
 description: "Shape output for a reader with ADHD: action first, numbered steps, state restated each turn, no tangents, concrete time estimates, visible wins. Stays on until 'stop adhd mode'."
 disable-model-invocation: true
 license: MIT
-metadata:
-  tags: "ADHD, Output Style, Productivity, Formatting"
-  category: "productivity"
+x-claude:
+  metadata:
+    tags: "ADHD, Output Style, Productivity, Formatting"
+    category: "productivity"
+x-cursor:
+  metadata:
+    tags: "ADHD, Output Style, Productivity, Formatting"
+    category: "productivity"
 x-codex:
   policy:
     allow_implicit_invocation: false
