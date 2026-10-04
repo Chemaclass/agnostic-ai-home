@@ -1,7 +1,8 @@
 ---
 name: gh-issue
 description: "Take one GitHub issue to a PR: read every comment, branch, implement, verify each acceptance criterion. Use when asked to work, fix, or pick up an issue by number or URL."
-argument-hint: "[issue-number or URL]"
+x-claude:
+  argument-hint: "[issue-number or URL]"
 ---
 
 # Work one issue

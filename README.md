@@ -25,7 +25,7 @@ Restart open sessions. In Codex, run `/hooks` once and trust `guard-shell`; Code
 
 - **Agreements** (`AGNOSTIC_AI.md`): finish the work, slice vertically, fix root causes, validate once, write plainly.
 - **Skills**: `gh-issue`, `gh-issues`, `pr-value-audit`, `object-design`, `recovery-evidence`, `agnostic-ai-specs`, `i-have-adhd`.
-- **Agents**, all read-only: `locator` (fast and cheap), `claim-verifier` and `reviewer` (strongest model, high effort).
+- **Agents**: `locator` (fast and cheap), `claim-verifier` and `reviewer` (strongest model, high effort). Their instructions forbid edits. Claude Code disables its file editing tools, and Cursor gets `readonly: true`. Codex inherits the parent session's permissions.
 - **Hook** `guard-shell`: blocks unleased force pushes, recursive `rm` with a glob, printing secret files, and em or en dashes in published text.
 
 ## Make it yours
@@ -39,7 +39,11 @@ Put your changes in `~/.agnostic-ai/local/`. It is gitignored but still synced, 
 ~/.agnostic-ai/local/agents/<name>.md     # add an agent, or edit a shared one
 ```
 
-A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.76.x, which `sync.sh` checks.
+A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.78.x, which `sync.sh` checks.
+
+`agnostic-ai.yaml` selects Claude Code, Codex, and Cursor for a bare `agnostic-ai sync --global`. To change that list on this machine, set `targets:` in `local/agnostic-ai.yaml`. `local/targets` overrides the list only when running `sync.sh`.
+
+Skill argument hints live under `x-claude`; skill metadata lives under `x-claude` and `x-cursor`. Manual-only skills retain their native invocation policies. Codex agent specs omit `sandbox_mode`, which current Codex ignores. For an enforced read-only Codex session, start it with `codex --sandbox read-only`.
 
 [SETUP.md](SETUP.md) covers collisions, switching specs off, and updates.
 
