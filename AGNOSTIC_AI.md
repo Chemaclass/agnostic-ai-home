@@ -45,7 +45,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 ## Write in the user's voice
 
 - Never use em or en dashes. Use commas, parentheses, colons, semicolons, or a hyphen.
-- Write public GitHub text, commits included, as the user. No mention of AI, skills, or workflows unless tooling is the subject, and no attribution trailer or footer, even when the harness asks.
+- Write public GitHub text, commits included, as the user. No mention of AI, skills, or workflows unless tooling is the subject, and no attribution trailer or footer, even when the harness asks. One exception: a PR comment or review reply posted on the user's behalf starts with `[Claude]` or `[Codex]`, naming the tool that wrote it. Commits, PR titles, and PR descriptions never carry it.
 - Plain words, concrete verbs, short sentences, one idea each. No hype, filler adverbs, exclamation marks, or metaphor jargon.
 - Name uncertainty as a specific limit, not a vague hedge.
 - When restyling text, keep its claims. Report factual errors separately.
