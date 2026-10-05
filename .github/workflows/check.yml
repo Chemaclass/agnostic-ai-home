@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - run: npm install -g agnostic-ai@0.78.0
+      - run: npm install -g agnostic-ai@0.79.0
       - run: ./scripts/check.sh
       - name: Sync into a clean home
         run: |
