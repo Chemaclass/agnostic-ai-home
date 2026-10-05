@@ -3,7 +3,7 @@
 set -e
 home="$HOME/.agnostic-ai"
 [ -d "$home" ] || { echo "sync.sh: $home is missing. Link it to your clone: ln -s <clone> $home" >&2; exit 1; }
-series=0.78
+series=0.79
 version=$(agnostic-ai --version 2>/dev/null | awk '{print $NF}')
 case "$version" in
   "$series".*) ;;
