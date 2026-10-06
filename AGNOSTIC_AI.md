@@ -48,6 +48,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Write public GitHub text, commits included, as the user. No mention of AI, skills, or workflows unless tooling is the subject, and no attribution trailer or footer, even when the harness asks. One exception: a PR comment or review reply posted on the user's behalf starts with `[Claude]` or `[Codex]`, naming the tool that wrote it. Commits, PR titles, and PR descriptions never carry it.
 - Plain words, concrete verbs, short sentences, one idea each. No hype, filler adverbs, exclamation marks, or metaphor jargon.
 - Name uncertainty as a specific limit, not a vague hedge.
+- No slop, ever. State each caveat once, in one place, never per section or per page. Cut any sentence that changes no decision: defensive disclaimers, restated summaries, "this is not a promise" lines. Keep each fact on one page and link to it from the others. One table per question. Lead with the answer.
 - When restyling text, keep its claims. Report factual errors separately.
 - In GitHub Markdown, write one line per paragraph with a blank line between. Code blocks keep their line breaks.
 
