@@ -14,7 +14,7 @@ npm install -g agnostic-ai                       # anywhere with Node 18+
 curl -fsSL https://raw.githubusercontent.com/Chemaclass/agnostic-ai/main/scripts/install.sh | bash
 ```
 
-If it is installed, run `agnostic-ai upgrade --version v0.79.0`. This repo is pinned to 0.79.x, and `sync.sh` refuses any other version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
+If it is installed, run `agnostic-ai upgrade --version v0.80.0`. This repo is pinned to 0.80.x, and `sync.sh` refuses any other version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
 
 ## 2. Clone and link
 
