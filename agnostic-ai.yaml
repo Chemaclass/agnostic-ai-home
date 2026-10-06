@@ -1,2 +1,4 @@
 version: 1
 targets: [claude, codex, cursor]
+requires: '>=0.80.0'
+builtins: [handoff, handoff-hook]

@@ -39,7 +39,7 @@ Put your changes in `~/.agnostic-ai/local/`. It is gitignored but still synced, 
 ~/.agnostic-ai/local/agents/<name>.md     # add an agent, or edit a shared one
 ```
 
-A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.79.x, which `sync.sh` checks.
+A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.80.x, which `sync.sh` checks.
 
 `agnostic-ai.yaml` selects Claude Code, Codex, and Cursor for a bare `agnostic-ai sync --global`. To change that list on this machine, set `targets:` in `local/agnostic-ai.yaml`. `local/targets` overrides the list only when running `sync.sh`.
 
