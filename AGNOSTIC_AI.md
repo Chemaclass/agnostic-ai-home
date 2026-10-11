@@ -8,6 +8,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Ask only for what is missing, or at a real fork (architecture, breaking change, dropped dependency), with a recommendation.
 - Authorization and constraints persist across turns. A status question or refinement steers the task; it does not cancel it.
 - Do independent work while waiting.
+- When a repo has a skill for the same purpose as a home skill, use the repo's. Repos name theirs with a project prefix (`miaforo-gh-issues`), because Claude Code loads the home skill when both share one name. The home skill is the fallback for repos with none.
 - Work a GitHub issue with the `gh-issue` skill. Never invent decisions or mark external prerequisites done. Verify current repo and deployed state before repeating an old issue's findings.
 - Delegate independent work, never a trivial task. Give each delegate a name, model, scope, and validation budget; it returns long results as a file path. Use `locator` for lookups and `reviewer` before a push. Run expensive checks in the main thread.
 - Match reasoning effort to the task: low for lookups and mechanical edits, high for design and debugging.
