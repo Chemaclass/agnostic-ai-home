@@ -3,12 +3,13 @@
 set -e
 home="$HOME/.agnostic-ai"
 [ -d "$home" ] || { echo "sync.sh: $home is missing. Link it to your clone: ln -s <clone> $home" >&2; exit 1; }
-series=0.82
+minimum=0.82.0
 version=$(agnostic-ai --version 2>/dev/null | awk '{print $NF}')
-case "$version" in
-  "$series".*) ;;
-  *) echo "sync.sh: needs agnostic-ai $series.x (found ${version:-none}). Run: agnostic-ai upgrade --version v$series.0" >&2; exit 1 ;;
-esac
+oldest=$(printf '%s\n%s\n' "$minimum" "${version:-0}" | sort -V | head -n 1)
+if [ -z "$version" ] || [ "$oldest" != "$minimum" ]; then
+  echo "sync.sh: needs agnostic-ai $minimum or newer (found ${version:-none}). Run: agnostic-ai upgrade" >&2
+  exit 1
+fi
 if [ "$(basename "$0")" = pre-commit ]; then
   [ "$(pwd -P)" = "$(cd -P "$home" && pwd)" ] || { echo "sync.sh: $home does not point at this repo" >&2; exit 1; }
   "$home/scripts/check.sh"
