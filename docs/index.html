@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>agnostic-ai home</title>
-<meta name="description" content="A global setup for AI coding agents, written once in ~/.agnostic-ai and synced to Claude Code, Codex, and Cursor with agnostic-ai.">
+<meta name="description" content="A global setup for AI coding agents, written once in ~/.agnostic-ai and synced to Claude Code and Codex with agnostic-ai.">
 <link rel="alternate" type="text/plain" title="llms.txt" href="llms.txt">
 <link rel="canonical" href="https://chemaclass.github.io/agnostic-ai-home/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%232c6a4c%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23fbfaf5%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%2015.5%2016%207l10%208.5%22/%3E%3Cpath%20d%3D%22M9%2013.5V25h14V13.5%22/%3E%3Cpath%20d%3D%22M13.5%2025v-6h5v6%22/%3E%3C/g%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:title" content="agnostic-ai home: one setup for every coding agent">
-<meta property="og:description" content="Written once in ~/.agnostic-ai, synced to Claude Code, Codex, and Cursor in each one's native format.">
+<meta property="og:description" content="Written once in ~/.agnostic-ai, synced to Claude Code and Codex in each one's native format.">
 <meta property="og:url" content="https://chemaclass.github.io/agnostic-ai-home/">
 <meta property="og:image" content="https://chemaclass.github.io/agnostic-ai-home/og.png">
 <meta property="og:image:width" content="1200">
@@ -188,7 +188,7 @@ html { scroll-behavior: smooth; }
 <header class="hero">
   <div>
     <h1>One setup for every coding agent.</h1>
-    <p class="lede">Written once in <code>~/.agnostic-ai</code>, synced to Claude Code, Codex, and Cursor in each one's native format by <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
+    <p class="lede">Written once in <code>~/.agnostic-ai</code>, synced to Claude Code and Codex in each one's native format by <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
   </div>
   <section class="prompt" aria-labelledby="prompt-title">
     <h2 id="prompt-title">Install</h2>
@@ -197,7 +197,7 @@ html { scroll-behavior: smooth; }
       <button type="button" role="tab" id="tab-hand" aria-controls="panel-hand" aria-selected="false" tabindex="-1">By hand</button>
     </div>
     <div role="tabpanel" id="panel-agent" aria-labelledby="tab-agent">
-      <p class="muted">Paste it into Claude Code, Codex, Cursor, or any coding agent.</p>
+      <p class="muted">Paste it into Claude Code, Codex, or any coding agent.</p>
       <div class="prompt-body">
         <pre id="prompt">Set up https://github.com/Chemaclass/agnostic-ai-home as my global AI config. Clone it, then follow its SETUP.md step by step.</pre>
         <button class="copy" type="button" data-copy="prompt">Copy</button>
@@ -232,7 +232,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 <p class="prose">Sync reads both layers through the link and writes real files into each tool.</p>
 <div class="panel diagram">
   <svg class="diagram-h" viewBox="0 0 820 330" role="img" aria-labelledby="dia-title">
-    <title id="dia-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh runs agnostic-ai sync --global and writes native files for Claude Code, Codex, and Cursor.</title>
+    <title id="dia-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh runs agnostic-ai sync --global and writes native files for Claude Code and Codex.</title>
     <defs><marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
     <rect class="hi" x="10" y="20" width="330" height="290" rx="8"/>
     <text x="26" y="48" font-size="15" font-weight="600">~/.agnostic-ai</text>
@@ -257,16 +257,11 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
     <text x="612" y="149" font-size="14" font-weight="600">Codex</text>
     <text x="612" y="171" font-size="11">~/.codex/AGENTS.md</text>
     <text x="612" y="189" font-size="11" class="dim">agents/*.toml hooks.json</text>
-    <rect class="box" x="598" y="226" width="214" height="84" rx="8"/>
-    <text x="612" y="252" font-size="14" font-weight="600">Cursor</text>
-    <text x="612" y="274" font-size="11">~/.cursor/AGENTS.md</text>
-    <text x="612" y="292" font-size="11" class="dim">skills/ agents/ hooks.json</text>
     <path class="arrow" d="M562,150 C580,150 575,62 594,62"/>
-    <path class="arrow" d="M562,165 L594,165"/>
-    <path class="arrow" d="M562,180 C580,180 575,268 594,268"/>
+    <path class="arrow" d="M562,175 C580,175 575,165 594,165"/>
   </svg>
-  <svg class="diagram-v" viewBox="0 0 340 600" role="img" aria-labelledby="dia-v-title">
-    <title id="dia-v-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh writes native files for Claude Code, Codex, and Cursor.</title>
+  <svg class="diagram-v" viewBox="0 0 340 520" role="img" aria-labelledby="dia-v-title">
+    <title id="dia-v-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh writes native files for Claude Code and Codex.</title>
     <defs><marker id="head-v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"/></marker></defs>
     <rect class="hi" x="10" y="10" width="320" height="226" rx="8"/>
     <text x="26" y="38" font-size="15" font-weight="600">~/.agnostic-ai</text>
@@ -282,10 +277,9 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
     <rect class="box" x="10" y="266" width="320" height="52" rx="8"/>
     <text x="26" y="289" font-size="13" font-weight="600">sync.sh</text>
     <text x="26" y="307" font-size="11" class="dim">agnostic-ai sync --global</text>
-    <path class="trunk" d="M26,318 L26,556"/>
+    <path class="trunk" d="M26,318 L26,472"/>
     <path class="arrow-v" d="M26,388 L44,388"/>
     <path class="arrow-v" d="M26,472 L44,472"/>
-    <path class="arrow-v" d="M26,556 L44,556"/>
     <rect class="box" x="48" y="356" width="282" height="64" rx="8"/>
     <text x="62" y="378" font-size="13" font-weight="600">Claude Code</text>
     <text x="62" y="396" font-size="11">~/.claude/CLAUDE.md</text>
@@ -294,16 +288,12 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
     <text x="62" y="462" font-size="13" font-weight="600">Codex</text>
     <text x="62" y="480" font-size="11">~/.codex/AGENTS.md</text>
     <text x="62" y="495" font-size="10.5" class="dim">agents/*.toml hooks.json</text>
-    <rect class="box" x="48" y="524" width="282" height="64" rx="8"/>
-    <text x="62" y="546" font-size="13" font-weight="600">Cursor</text>
-    <text x="62" y="564" font-size="11">~/.cursor/AGENTS.md</text>
-    <text x="62" y="579" font-size="10.5" class="dim">skills/ agents/ hooks.json</text>
   </svg>
 </div>
 
 <p class="prose">Text outside the managed block stays yours. Sync records what it owns in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
 
-<h2 id="native-files">One spec, three native files</h2>
+<h2 id="native-files">One spec, two native files</h2>
 <p class="prose">Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. A field a tool cannot honor is dropped with a note at sync time, never silently.</p>
 <div class="split">
   <div class="file">
@@ -330,29 +320,17 @@ You find code. You never edit files...</pre>
 <span class="k">model_reasoning_effort</span> = <span class="s">"low"</span>
 <span class="k">sandbox_mode</span> = <span class="s">"read-only"</span></pre>
     </div>
-    <div class="file">
-      <div class="file-path"><b>~/.cursor/agents/locator.md</b><span>Cursor</span></div>
-<pre><span class="k">readonly:</span> true</pre>
-    </div>
   </div>
 </div>
 
 <h2 id="tools-differ">Where tools really differ</h2>
-<p class="prose">Sync never translates hook events. So the shell guard ships as two specs over one script: Claude and Codex share <code>PreToolUse</code>, Cursor needs <code>beforeShellExecution</code> and a JSON reply.</p>
-<div class="pair">
-  <div class="file">
+<p class="prose">Sync never translates hook events. The shell guard is one spec that Claude and Codex share, on the <code>PreToolUse</code> event.</p>
+<div class="file">
     <div class="file-path"><b>hooks/guard-shell.yaml</b><span>Claude, Codex</span></div>
 <pre><span class="k">targets:</span> [claude, codex]
 <span class="k">event:</span> PreToolUse
 <span class="k">matcher:</span> Bash
 <span class="k">command:</span> <span class="s">"$HOME/.agnostic-ai/scripts/guard-shell.py"</span></pre>
-  </div>
-  <div class="file">
-    <div class="file-path"><b>hooks/guard-shell-cursor.yaml</b><span>Cursor</span></div>
-<pre><span class="k">target:</span> cursor
-<span class="k">event:</span> beforeShellExecution
-<span class="k">command:</span> <span class="s">"$HOME/.agnostic-ai/scripts/guard-shell.py"</span></pre>
-  </div>
 </div>
 <p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text. Codex runs it only after you trust it once in <code>/hooks</code>.</p>
 
@@ -365,7 +343,7 @@ AGNOSTIC_AI.md               <span class="c"># appended after the shared agreeme
 skills/work-notes/SKILL.md   <span class="c"># a private skill</span>
 agents/reviewer.md           <span class="c"># edits agents/reviewer.md</span></pre>
 </div>
-<p class="prose">To switch a shared skill, agent, or hook off, create the same path under <code>local/</code> with only <code>name</code> and <code>targets-exclude: [claude, codex, cursor]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
+<p class="prose">To switch a shared skill, agent, or hook off, create the same path under <code>local/</code> with only <code>name</code> and <code>targets-exclude: [claude, codex]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
 
 <p class="prose">To update, pull and sync from any directory. Sync applies your local fields on top of the new shared specs. Only a local body that replaces the shared one needs a manual merge.</p>
 <div class="file tree">
