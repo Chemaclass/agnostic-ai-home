@@ -92,20 +92,5 @@ class ClaudeAndCodex(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
 
 
-class Cursor(unittest.TestCase):
-    def reply(self, command):
-        result = run(command, event="beforeShellExecution")
-        self.assertEqual(result.returncode, 0)
-        return json.loads(result.stdout)
-
-    def test_denies_with_a_reason(self):
-        reply = self.reply("git push --force")
-        self.assertEqual(reply["permission"], "deny")
-        self.assertIn("--force-with-lease", reply["agent_message"])
-
-    def test_allows_explicitly(self):
-        self.assertEqual(self.reply("git status"), {"permission": "allow"})
-
-
 if __name__ == "__main__":
     unittest.main()

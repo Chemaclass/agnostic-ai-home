@@ -14,7 +14,7 @@ npm install -g agnostic-ai                       # anywhere with Node 18+
 curl -fsSL https://raw.githubusercontent.com/Chemaclass/agnostic-ai/main/scripts/install.sh | bash
 ```
 
-If it is installed, run `agnostic-ai upgrade`. This repo needs 0.82.0 or newer, and `sync.sh` refuses an older version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
+If it is installed, run `agnostic-ai upgrade`. This repo needs 0.84.0 or newer, and `sync.sh` refuses an older version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
 
 ## 2. Clone and link
 
@@ -29,10 +29,10 @@ Check `~/.agnostic-ai` first:
 Find the AI CLIs the user has: look for binaries (`claude`, `codex`, `cursor-agent`, `gemini`, ...) and config dirs (`~/.claude`, `~/.codex`, `~/.cursor`, `~/.gemini`, ...). Map each to its agnostic-ai target name, then write them comma-separated to `~/.agnostic-ai/local/targets`:
 
 ```bash
-mkdir -p ~/.agnostic-ai/local && printf 'claude,codex,cursor\n' > ~/.agnostic-ai/local/targets
+mkdir -p ~/.agnostic-ai/local && printf 'claude,codex\n' > ~/.agnostic-ai/local/targets
 ```
 
-Without that file, `sync.sh` targets `claude,codex,cursor`. If sync rejects a name, its error lists the supported ones. Tell the user that the `guard-shell` hook ships for Claude Code, Codex, and Cursor only; other tools get the agreements, skills, and agents.
+Without that file, `sync.sh` targets `claude,codex`. If sync rejects a name, its error lists the supported ones. Tell the user that the `guard-shell` hook ships for Claude Code and Codex only; other tools get the agreements, skills, and agents.
 
 Bare `agnostic-ai sync --global` reads the defaults from `agnostic-ai.yaml`. To use the same custom list there, also write `targets: [<selected targets>]` to `local/agnostic-ai.yaml`.
 

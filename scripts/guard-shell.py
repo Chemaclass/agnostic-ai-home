@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Block shell commands the global agreements forbid. Claude and Codex get exit 2; Cursor gets a permission reply."""
+"""Block shell commands the global agreements forbid. Exit 2 with the reason on stderr."""
 import json
 import os
 import re
@@ -128,11 +128,6 @@ def main():
     except ValueError:
         return 0
     reason = violation(command_from(payload))
-    if payload.get("hook_event_name") == "beforeShellExecution":
-        # Cursor blocks the command when a permission hook prints no valid reply.
-        reply = {"permission": "deny", "user_message": reason, "agent_message": reason} if reason else {"permission": "allow"}
-        print(json.dumps(reply))
-        return 0
     if not reason:
         return 0
     print(reason, file=sys.stderr)
