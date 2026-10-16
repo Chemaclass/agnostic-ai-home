@@ -3,7 +3,7 @@
 set -e
 home="$HOME/.agnostic-ai"
 [ -d "$home" ] || { echo "sync.sh: $home is missing. Link it to your clone: ln -s <clone> $home" >&2; exit 1; }
-minimum=0.84.0
+minimum=0.85.0
 version=$(agnostic-ai --version 2>/dev/null | awk '{print $NF}')
 oldest=$(printf '%s\n%s\n' "$minimum" "${version:-0}" | sort -V | head -n 1)
 if [ -z "$version" ] || [ "$oldest" != "$minimum" ]; then
