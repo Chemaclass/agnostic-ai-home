@@ -1,4 +1,6 @@
 import os
+import signal
+import time
 import pathlib
 import subprocess
 import tempfile
@@ -22,6 +24,7 @@ echo "sync $PWD $*" >> "$FAKE_LOG"
 FAKE_GLOBAL_SYNC = """#!/bin/sh
 case " $* " in *" --check "*) [ -n "$FAKE_IN_SYNC" ]; exit $? ;; esac
 echo "global $*" >> "$FAKE_LOG"
+[ -z "$FAKE_SLOW" ] || sleep "$FAKE_SLOW"
 """
 
 
@@ -48,7 +51,7 @@ class StubbedTools(unittest.TestCase):
         self.log.write_text("")
         self.env = dict(CLEAN_ENV, HOME=str(self.home), PATH=f"{bin_dir}:{CLEAN_ENV['PATH']}",
                         FAKE_VERSION="1.0.0", FAKE_LOG=str(self.log), CLAUDE_PROJECT_DIR=str(self.project))
-        for variable in ["FAKE_IN_SYNC", "FAKE_TOUCH", "FAKE_FAIL"]:
+        for variable in ["FAKE_IN_SYNC", "FAKE_TOUCH", "FAKE_FAIL", "FAKE_SLOW"]:
             self.env.pop(variable, None)
 
     def write_script(self, path, body):
@@ -118,9 +121,24 @@ class SessionStartSync(StubbedTools):
         self.assertEqual(self.syncs(), ["global "])
 
     def test_skips_silently_while_another_session_holds_the_lock(self):
-        (self.home / ".agnostic-ai/state/synced-versions/.lock").mkdir(parents=True)
+        lock = self.home / ".agnostic-ai/state/synced-versions/.lock"
+        lock.mkdir(parents=True)
         self.assertEqual(self.session_start(), "")
         self.assertEqual(self.syncs(), [])
+        self.assertTrue(lock.is_dir())
+
+    def test_a_terminated_hook_stops_before_the_project_sync_and_releases_its_lock(self):
+        hook = subprocess.Popen([str(SCRIPT), "--session-start"], cwd=self.project, env=dict(self.env, FAKE_SLOW="1"),
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        deadline = time.time() + 10
+        while self.syncs() != ["global "] and time.time() < deadline:
+            time.sleep(0.05)
+        hook.send_signal(signal.SIGTERM)
+        self.assertEqual(hook.wait(timeout=10), 0)
+        hook.stdout.close()
+        hook.stderr.close()
+        self.assertEqual(self.syncs(), ["global "])
+        self.assertFalse((self.home / ".agnostic-ai/state/synced-versions/.lock").exists())
 
     def test_a_stamp_for_another_path_does_not_count(self):
         self.session_start()

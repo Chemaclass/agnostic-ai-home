@@ -101,6 +101,12 @@ sync_global() {
   return 1
 }
 
+release_lock() {
+  [ "${lock_owned:-0}" = 1 ] || return 0
+  lock_owned=0
+  rmdir "$lock" 2>/dev/null
+}
+
 session_start() {
   version=$(installed_version)
   [ -n "$version" ] && [ -d "$home" ] || return 0
@@ -108,7 +114,9 @@ session_start() {
   mkdir -p "$stamps" || return 0
   [ -z "$(find "$lock" -maxdepth 0 -mmin +10 2>/dev/null)" ] || rmdir "$lock" 2>/dev/null
   mkdir "$lock" 2>/dev/null || return 0
-  trap 'rmdir "$lock" 2>/dev/null' EXIT INT TERM
+  lock_owned=1
+  trap 'release_lock' EXIT
+  trap 'release_lock; exit 0' INT TERM
   report=""
   if ! stamped global; then
     if sync_global; then stamp global; else report="global setup $status"; fi
