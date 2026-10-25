@@ -1,4 +1,4 @@
 version: 1
 targets: [claude, codex]
-requires: '>=0.87.0'
+requires: '>=0.88.0'
 builtins: [handoff, handoff-hook]
