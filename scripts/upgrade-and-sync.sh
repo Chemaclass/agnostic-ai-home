@@ -18,26 +18,39 @@ stamp_file() {
 }
 
 stamped() {
-  [ "$(head -n 1 "$(stamp_file "$1")" 2>/dev/null)" = "$version" ]
+  [ "$(cat "$(stamp_file "$1")" 2>/dev/null)" = "$(printf '%s\n%s' "$version" "$1")" ]
 }
 
 stamp() {
-  mkdir -p "$stamps" && printf '%s\n%s\n' "$version" "$1" > "$(stamp_file "$1")"
+  target=$(stamp_file "$1")
+  mkdir -p "$stamps" && printf '%s\n%s\n' "$version" "$1" > "$target.$$" && mv -f "$target.$$" "$target"
 }
 
 first_error() {
   printf '%s\n' "$1" | grep -m 1 -E 'AAI-|error|Error|needs agnostic-ai' || printf '%s\n' "$1" | tail -n 1
 }
 
-# Main checkouts with agnostic-ai.yaml at the root. Skips worktrees, this home repo, and the agnostic-ai source repo (it syncs with `go run`).
+# Main checkouts with agnostic-ai.yaml at the root. Skips worktrees (a sync there would leave outputs in a feature branch), this home repo, and the agnostic-ai source repo (it syncs with `go run`).
 is_project() {
-  [ -f "$1/agnostic-ai.yaml" ] && [ -e "$1/.git" ] || return 1
+  [ -f "$1/agnostic-ai.yaml" ] && [ -d "$1/.git" ] || return 1
   [ "$(cd -P "$1" && pwd)" != "$(cd -P "$home" 2>/dev/null && pwd)" ] || return 1
   [ ! -d "$1/cmd/agnostic-ai" ]
 }
 
-dirty_files() {
-  git -C "$1" status --porcelain --untracked-files=all 2>/dev/null | sort
+dirty_paths() {
+  git -C "$1" status --porcelain --untracked-files=all 2>/dev/null | cut -c 4- | sort
+}
+
+# Reads paths on stdin and prints "<content hash> <path>", so a rewrite of an already dirty file shows up.
+fingerprints() {
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    printf '%s %s\n' "$(git -C "$1" hash-object -- "$path" 2>/dev/null || echo -)" "$path"
+  done
+}
+
+without() {
+  if [ -n "$1" ]; then grep -v -x -F "$1"; else cat; fi
 }
 
 # Sets $status for the project; returns non-zero when the sync failed.
@@ -52,12 +65,15 @@ sync_project() {
     status="would sync"
     return 0
   fi
-  before=$(dirty_files "$dir")
+  before=$(dirty_paths "$dir")
+  before_prints=$(printf '%s\n' "$before" | fingerprints "$dir")
   if ! out=$(cd "$dir" && agnostic-ai sync --keep-edits 2>&1); then
     status="failed: $(first_error "$out")"
     return 1
   fi
-  changed=$(dirty_files "$dir" | { if [ -n "$before" ]; then grep -v -x -F "$before"; else cat; fi; } | cut -c 4- | paste -s -d ' ' -)
+  added=$(dirty_paths "$dir" | without "$before")
+  rewritten=$(printf '%s\n' "$before" | fingerprints "$dir" | without "$before_prints" | cut -d ' ' -f 2-)
+  changed=$(printf '%s\n%s\n' "$added" "$rewritten" | grep -v '^$' | sort -u | paste -s -d ' ' -)
   kept=$(printf '%s\n' "$out" | sed -n 's/^  ~ kept \([^ ]*\) (edited.*/\1/p' | paste -s -d ' ' -)
   status="synced"
   [ -z "$changed" ] || status="files changed, left uncommitted: $changed"
@@ -88,6 +104,11 @@ sync_global() {
 session_start() {
   version=$(installed_version)
   [ -n "$version" ] && [ -d "$home" ] || return 0
+  lock="$stamps/.lock"
+  mkdir -p "$stamps" || return 0
+  [ -z "$(find "$lock" -maxdepth 0 -mmin +10 2>/dev/null)" ] || rmdir "$lock" 2>/dev/null
+  mkdir "$lock" 2>/dev/null || return 0
+  trap 'rmdir "$lock" 2>/dev/null' EXIT INT TERM
   report=""
   if ! stamped global; then
     if sync_global; then stamp global; else report="global setup $status"; fi
@@ -118,12 +139,12 @@ sync_everything() {
   IFS=:
   for root in $roots; do
     IFS=$old_ifs
-    configs=$(find "$root" -mindepth 2 -maxdepth 3 -name agnostic-ai.yaml -not -path '*/node_modules/*' -not -path '*/.agnostic-ai/*' 2>/dev/null | sort)
+    configs=$(find "$root" -mindepth 1 -maxdepth 3 -name agnostic-ai.yaml -not -path '*/node_modules/*' -not -path '*/.agnostic-ai/*' 2>/dev/null | sort)
     while IFS= read -r config; do
       [ -n "$config" ] || continue
       dir=$(dirname "$config")
       case "$(basename "$dir")" in *-wt-*) continue ;; esac
-      { [ -d "$dir/.git" ] && is_project "$dir"; } || continue
+      is_project "$dir" || continue
       if sync_project "$dir"; then [ "$dry_run" = 1 ] || stamp "$dir"; else failures=$((failures + 1)); fi
       printf '  %-34s %s\n' "${dir#"$root"/}" "$status"
     done <<EOF
