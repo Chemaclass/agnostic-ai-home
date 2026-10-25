@@ -14,7 +14,7 @@ npm install -g agnostic-ai                       # anywhere with Node 18+
 curl -fsSL https://raw.githubusercontent.com/Chemaclass/agnostic-ai/main/scripts/install.sh | bash
 ```
 
-If it is installed, run `agnostic-ai upgrade`. This repo needs 0.87.0 or newer, and `sync.sh` refuses an older version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
+If it is installed, run `agnostic-ai upgrade`. Later upgrades go through `~/.agnostic-ai/scripts/upgrade-and-sync.sh` (see [Updating](#updating)). This repo needs 0.87.0 or newer, and `sync.sh` refuses an older version. Older releases also replace a local spec whole instead of merging it. Also confirm `git` and `python3` exist; the shell guard hook needs Python.
 
 ## 2. Clone and link
 
@@ -59,7 +59,7 @@ git -C ~/.agnostic-ai status --short   # must print nothing
 
 Sync writes a managed block into each tool's global instructions file (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, ...) and real files into its skills, agents, and hooks folders. Text outside the managed block stays the user's. Tell the user to restart open sessions.
 
-Codex runs a hook only after the user trusts it. Tell them to open Codex, run `/hooks`, and trust `guard-shell`. Until then Codex skips the guard without a warning. When a sync changes the hook entry in `~/.codex/hooks.json`, trust it again.
+Codex runs a hook only after the user trusts it. Tell them to open Codex, run `/hooks`, and trust `guard-shell` and `sync-on-upgrade`. Until then Codex skips the guard without a warning. When a sync changes the hook entry in `~/.codex/hooks.json`, trust it again.
 
 ## 6. Nightly cleanup (macOS)
 
@@ -82,6 +82,7 @@ Run it by hand with `~/.agnostic-ai/scripts/reap-stale-agents.sh` (`--dry-run` t
 ~/.agnostic-ai/local/skills/<name>/SKILL.md  # a private skill, or edits skills/<name>/
 ~/.agnostic-ai/local/agents/<name>.md        # a private agent, or edits agents/<name>.md
 ~/.agnostic-ai/local/hooks/<name>.yaml       # a private hook, or edits hooks/<name>.yaml
+~/.agnostic-ai/local/project-roots           # folders upgrade-and-sync.sh searches for projects, one per line (default ~/Code)
 ```
 
 - To change a shared spec, create the same path under `local/` with `name` and only the fields that change. Maps merge key by key, scalars and lists replace, `null` removes a key.
@@ -96,6 +97,10 @@ Run `~/.agnostic-ai/sync.sh` after every change. `local/` never leaves the machi
 ```bash
 git -C ~/.agnostic-ai pull --ff-only && ~/.agnostic-ai/sync.sh
 ```
+
+To upgrade agnostic-ai itself, run `~/.agnostic-ai/scripts/upgrade-and-sync.sh` (`--dry-run` to preview, `--no-upgrade` to only sync). It upgrades, then syncs the global setup and each project checkout under the project roots, and prints one line each: up to date, synced, files changed (left uncommitted for review), or failed. A project that pins an older `requires` fails until someone runs `agnostic-ai upgrade --requires` there. Worktrees, this repo, and the agnostic-ai source repo are skipped.
+
+After an upgrade by any other route, the `sync-on-upgrade` hook does the same at the next session start, for the global setup and the current project only. It runs once per installed version (stamps in the gitignored `state/synced-versions/`), stays silent when all is well, leaves hand-edited outputs in place, never commits, and names the files a sync changed.
 
 New shared files arrive with the pull, and sync applies each local spec on top of the new shared one. Only a local spec that replaces the whole body needs a manual merge. For those, show the user what changed upstream:
 

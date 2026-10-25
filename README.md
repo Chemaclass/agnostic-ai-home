@@ -19,14 +19,14 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 ~/.agnostic-ai/sync.sh
 ```
 
-Restart open sessions. In Codex, run `/hooks` once and trust `guard-shell`; Codex skips untrusted hooks. Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`.
+Restart open sessions. In Codex, run `/hooks` once and trust `guard-shell` and `sync-on-upgrade`; Codex skips untrusted hooks. Update with `git -C ~/.agnostic-ai pull && ~/.agnostic-ai/sync.sh`. Upgrade agnostic-ai and re-sync every project with `~/.agnostic-ai/scripts/upgrade-and-sync.sh`.
 
 ## What you get
 
 - **Agreements** (`AGNOSTIC_AI.md`): finish the work, slice vertically, fix root causes, validate once, write plainly.
 - **Skills**: `gh-issue`, `gh-issues`, `pr-value-audit`, `object-design`, `recovery-evidence`, `agnostic-ai-specs`, `i-have-adhd`, plus the built-in `handoff` with its session hooks.
 - **Agents**: `locator` (fast and cheap), `claim-verifier` and `reviewer` (strongest model, high effort). Their instructions forbid edits. Claude Code disables its file editing tools. Codex inherits the parent session's permissions.
-- **Hook** `guard-shell`: blocks unleased force pushes, recursive `rm` with a glob, printing secret files, and em or en dashes in published text.
+- **Hooks**: `guard-shell` blocks unleased force pushes, recursive `rm` with a glob, printing secret files, and em or en dashes in published text. `sync-on-upgrade` re-syncs the global setup and the current project at the first session after an agnostic-ai upgrade.
 
 ## Make it yours
 

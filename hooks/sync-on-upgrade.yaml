@@ -1,0 +1,6 @@
+name: sync-on-upgrade
+description: After an agnostic-ai upgrade, sync the global setup and the current project once, and name the files it changed.
+targets: [claude, codex]
+on: session-start
+command: "$HOME/.agnostic-ai/scripts/upgrade-and-sync.sh --session-start"
+timeout: 120

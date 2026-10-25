@@ -27,6 +27,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Before adding a file, fixture, or extension, grep for what already consumes that path, extension, or namespace. Then run the integration suite, not only unit tests.
 - After a rename, grep every reference (literal paths and URLs, frontend stores, i18n keys, seeders, schema) and ship a production-safe migration.
 - For a manual release, use the repo's release script when it has one, then verify the published artifact.
+- Upgrade agnostic-ai with `~/.agnostic-ai/scripts/upgrade-and-sync.sh`; it syncs the global setup and every project. After any other upgrade, the `sync-on-upgrade` session hook syncs the global setup and the current project once. Neither commits: review and commit the files they list.
 
 ## Validate once per change
 
