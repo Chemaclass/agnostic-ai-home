@@ -2,7 +2,7 @@
 name: pr-value-audit
 disable-model-invocation: true
 description: "Audit whether a PR should ship and whether each part earns its place: verify premises on the base branch, hunt duplication and YAGNI, label units, propose cuts. Takes a PR number, URL, or branch; defaults to the current branch."
-model: {claude: opus}
+model: strong
 effort: {claude: xhigh}
 x-codex:
   policy:

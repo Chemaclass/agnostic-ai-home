@@ -2,3 +2,8 @@ version: 1
 targets: [claude, codex]
 requires: '>=0.88.0'
 builtins: [handoff, handoff-hook]
+models:
+  frontier: {claude: fable,  codex: astra, effort: xhigh}
+  strong:   {claude: opus,   codex: sol,   effort: high}
+  balanced: {claude: sonnet, codex: terra, effort: medium}
+  fast:     {claude: haiku,  codex: luna,  effort: low}

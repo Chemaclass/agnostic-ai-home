@@ -25,7 +25,7 @@ Restart open sessions. In Codex, run `/hooks` once and trust `guard-shell` and `
 
 - **Agreements** (`AGNOSTIC_AI.md`): finish the work, slice vertically, fix root causes, validate once, write plainly.
 - **Skills**: `gh-issue`, `gh-issues`, `pr-value-audit`, `object-design`, `recovery-evidence`, `agnostic-ai-specs`, `i-have-adhd`, plus the built-in `handoff` with its session hooks.
-- **Agents**: `locator` (fast and cheap), `claim-verifier` and `reviewer` (strongest model, high effort). Their instructions forbid edits. Claude Code disables its file editing tools. Codex inherits the parent session's permissions.
+- **Agents**: `locator` (`fast` tier), `claim-verifier` and `reviewer` (`strong` tier). Their instructions forbid edits. Claude Code disables its file editing tools. Codex inherits the parent session's permissions.
 - **Hooks**: `guard-shell` blocks unleased force pushes, recursive `rm` with a glob, printing secret files, and em or en dashes in published text. `sync-on-upgrade` re-syncs the global setup and the current project at the first session after an agnostic-ai upgrade.
 
 ## Make it yours
