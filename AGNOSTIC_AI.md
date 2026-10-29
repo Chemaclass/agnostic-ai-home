@@ -7,11 +7,12 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Implement, fix, continue, or a bare "go" means do the next implied step. Plans serve delivery; they are not the stopping point.
 - Ask only for what is missing, or at a real fork (architecture, breaking change, dropped dependency), with a recommendation.
 - Authorization and constraints persist across turns. A status question or refinement steers the task; it does not cancel it.
-- Do independent work while waiting.
+- Do independent work while waiting. Follow the user's requested priority and concurrency; use separate worktrees for independent changes and keep dependencies in order.
 - A repo's specifics for a home workflow (branch names, gates, review steps) go in its project instructions; the home skill reads them. Add a repo skill only when its workflow differs, and give it a project prefix (`miaforo-gh-issues`), because Claude Code loads the home skill when both share one name. When a repo has such a skill, use it.
 - Work a GitHub issue with the `gh-issue` skill. Never invent decisions or mark external prerequisites done. Verify current repo and deployed state before repeating an old issue's findings.
-- Delegate independent work, never a trivial task. Give each delegate a name, model, scope, and validation budget; it returns long results as a file path. Use `locator` for lookups and `reviewer` before a push. Run expensive checks in the main thread.
+- Delegate independent work only when authorized. Give each delegate a name, owned scope and validation budget; return long results as a file path. Inherit the current model unless a supported task-specific tier is justified. Use `locator` for lookups and `reviewer` before pushing. Coordinate expensive checks centrally.
 - Match reasoning effort to the task: low for lookups and mechanical edits, high for design and debugging.
+- On continuation or timeout, inspect current code, GitHub and live processes before restarting work. A missing session handle does not mean its process stopped; historical reflog entries do not prove concurrent editing.
 
 ## Slice vertically
 
@@ -24,15 +25,15 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 ## Debug and change safely
 
 - Find the root cause before editing. Trace the data flow, cascade, or inheritance and confirm the source. No surface patches. In CSS, check global selectors first.
-- Before adding a file, fixture, or extension, grep for what already consumes that path, extension, or namespace. Then run the integration suite, not only unit tests.
+- Before adding a file, fixture, or extension, grep for what already consumes that path, extension, or namespace. Then exercise the affected integration path, not only an isolated unit test.
 - After a rename, grep every reference (literal paths and URLs, frontend stores, i18n keys, seeders, schema) and ship a production-safe migration.
 - For a manual release, use the repo's release script when it has one, then verify the published artifact.
 - Upgrade agnostic-ai with `~/.agnostic-ai/scripts/upgrade-and-sync.sh`; it syncs the global setup and every project. After any other upgrade, the `sync-on-upgrade` session hook syncs the global setup and the current project once. Neither commits: review and commit the files they list.
 
 ## Validate once per change
 
-- Run tests, typechecks, linters, and builds once the change set is complete, not after each edit. Run an earlier targeted check only to diagnose or unblock.
-- Never push before the full local gate is green: tests, static analysis, formatter, and any mutation or benchmark gate.
+- Choose checks by behavior and risk. Start focused; broaden for affected boundaries, failures or explicit requirements. Do not run every suite for every change. Earlier checks should diagnose or unblock.
+- Run required gates after completing the change. Reuse a successful commit-hook gate on unchanged code. Fix failures and rerun affected checks; repeat full gates only when required or justified. Never bypass required hooks or claim unrun checks passed.
 - When PR CI runs on one OS and the change touches paths, file watching, renames, or permissions, run the full OS matrix before merging.
 - Never run typechecks concurrently. Budget expensive checks across worktrees and delegates.
 - Benchmarks: land harness changes before the PR that measures a delta, measure on current main, state the baseline commit and method, and re-run an anomalous reading.

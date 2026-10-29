@@ -21,7 +21,7 @@ gh repo view --json defaultBranchRef -q .defaultBranchRef.name
 
 ## 1. Setup
 
-1. Refuse to start on a dirty working tree; say what is uncommitted.
+1. Refuse to start new work in a dirty working tree; say what is uncommitted. When resuming this issue, inspect and continue its existing changes instead of treating them as unrelated dirt. Use a separate worktree for authorized parallel work.
 2. Confirm the issue is ready: no open blocker (a blocker is done when its PR is merged, not when it is open), no unresolved product decision, no missing external prerequisite. Check the repo's roadmap issue when it has one. If it is not ready, say why and stop.
 3. Assign yourself only now, as work starts: `gh issue edit <n> --add-assignee @me`.
 4. Branch from the remote default branch, never the local one (local commits ahead of origin get swallowed by a squash merge). Name it `<n>-<slug>` unless the repo has its own convention:
@@ -34,7 +34,7 @@ gh repo view --json defaultBranchRef -q .defaultBranchRef.name
 
 5. Treat the issue's scope and out-of-scope sections as a contract. State the acceptance scenario and non-goals. Work outside them gets a new issue, not this PR.
 6. Read decisions already made in the issue, linked issues, and linked designs, so the PR does not relitigate them.
-7. Explore the code the issue names before designing.
+7. Explore the code the issue names before designing. Check current default-branch code and related open or merged PRs so an old report does not cause duplicate work.
 
 ## 3. Implement
 
@@ -44,7 +44,7 @@ gh repo view --json defaultBranchRef -q .defaultBranchRef.name
 ## 4. Verify
 
 10. Verify every acceptance criterion with the command the issue gives, or the narrowest command that proves it. Not "looks right".
-11. After the complete change, run the repo's pre-push gate once (from its instructions, `CONTRIBUTING.md`, package scripts, Makefile, or CI config).
+11. Choose focused tests for the changed behavior and risk, then run the repo's required local gate once after the complete change (from its instructions, `CONTRIBUTING.md`, package scripts, Makefile, or CI config). If its commit hook runs that gate, let the hook own it. Do not rerun the same gate before pushing unchanged code. Coordinate expensive checks with other workers and never run typechecks concurrently.
 
 ## 5. Ship
 
