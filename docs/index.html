@@ -144,7 +144,6 @@ ol.steps li { margin-bottom: 8px; padding-left: 4px; }
 ol.steps li::marker { color: var(--accent); font-weight: 600; }
 
 footer { margin-top: 104px; padding-top: 28px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; }
-.stamp { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; letter-spacing: -0.025em; margin: 0; }
 footer p.muted { margin: 0; font-size: 0.92rem; }
 
 @media (max-width: 860px) {
@@ -222,16 +221,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 </header>
 
 <h2 id="how-it-works">How it works</h2>
-<div class="prose">
-  <p>Your clone holds everything. <code>~/.agnostic-ai</code> is a symlink to it, so both paths point at the same files. Your own changes go in <code>~/.agnostic-ai/local/</code>, a gitignored folder inside the clone.</p>
-</div>
-<div class="file tree">
-  <div class="file-path"><b>~/Code/agnostic-ai-home/</b><span>~/.agnostic-ai links here</span></div>
-<pre>├── AGNOSTIC_AI.md            <span class="c"># shared, tracked by git</span>
-├── skills/ agents/ hooks/    <span class="c"># shared, tracked by git</span>
-└── local/                    <span class="c"># yours: gitignored, still synced</span></pre>
-</div>
-<p class="prose">Sync reads both layers through the link and writes real files into each tool.</p>
+<p class="prose">Your clone holds the shared specs, and <code>~/.agnostic-ai</code> links to it. Your own changes go in <code>local/</code>, a gitignored folder inside it. Sync reads both and writes each tool's own files.</p>
 <div class="panel diagram">
   <svg class="diagram-h" viewBox="0 0 820 330" role="img" aria-labelledby="dia-title">
     <title id="dia-title">~/.agnostic-ai links to the clone, which holds the shared specs and the gitignored local/ folder. sync.sh runs agnostic-ai sync --global and writes native files for Claude Code and Codex.</title>
@@ -293,7 +283,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
   </svg>
 </div>
 
-<p class="prose">Text outside the managed block stays yours. Sync records what it owns in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
+<p class="prose">In a file you also edit by hand, sync writes only its own marked block and leaves your text alone. It records what it wrote in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
 
 <h2 id="config">One config for every tool</h2>
 <p class="prose">One file picks the tools and names the model tiers. Specs ask for a tier, never a model, so a model change is one line.</p>
@@ -321,14 +311,14 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 <p class="prose">Sync expands each short name to the tool's full model name, so <code>luna</code> becomes <code>gpt-6-luna</code> in Codex. Point <code>strong</code> at a new model and both agents on it move in Claude Code and Codex. The skill moves in Claude Code, since Codex sets models on agents only.</p>
 
 <h2 id="native-files">One spec, two native files</h2>
-<p class="prose">Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. A field a tool cannot honor is dropped with a note at sync time, never silently.</p>
+<p class="prose">Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. When a tool has no use for a field, sync drops it and prints a note.</p>
 <div class="split">
   <div class="file">
     <div class="file-path"><b>agents/locator.md</b><span>source</span></div>
 <pre><span class="c">---</span>
 <span class="k">name:</span> locator
 <span class="k">model:</span> fast        <span class="c"># a tier, not a model</span>
-<span class="k">readonly:</span> true      <span class="c"># each tool's own way</span>
+<span class="k">readonly:</span> true      <span class="c"># may not edit files</span>
 <span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob]}  <span class="c"># Claude only</span>
 <span class="k">x-codex:</span> {<span class="k">sandbox_mode:</span> null}        <span class="c"># Codex only</span>
 <span class="c">---</span>
@@ -404,13 +394,13 @@ You find code. You never edit files...</pre>
 </div>
 
 <h2 id="make-it-yours">Make it yours without forking</h2>
-<p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A new name is added. A file with the same kind and name as a shared spec merges into it: write only the fields that change, and a <code>::parent</code> line to extend the body. <code>git pull</code> never conflicts.</p>
+<p class="prose">Put your changes in <code>~/.agnostic-ai/local/</code>, never in tracked files, so <code>git pull</code> never conflicts. A file with a new name adds a spec. A file with the same name as a shared spec merges into it: write only the fields that change, and a <code>::parent</code> line to extend the body.</p>
 <div class="file tree">
   <div class="file-path"><b>~/.agnostic-ai/local/</b><span>gitignored</span></div>
 <pre>targets                      <span class="c"># claude,codex,gemini</span>
 AGNOSTIC_AI.md               <span class="c"># appended after the shared agreements</span>
 skills/work-notes/SKILL.md   <span class="c"># a private skill</span>
-agents/reviewer.md           <span class="c"># edits agents/reviewer.md</span></pre>
+agents/reviewer.md           <span class="c"># changes the shared reviewer</span></pre>
 </div>
 <p class="prose">That last file can be three lines. It moves the shared reviewer to the top tier on this machine, so it runs on <code>fable</code> in Claude Code and <code>gpt-6-astra</code> in Codex. Everything else, body included, comes from the shared spec.</p>
 <div class="file tree">
@@ -435,7 +425,6 @@ agents/reviewer.md           <span class="c"># edits agents/reviewer.md</span></
 </ol>
 
 <footer>
-  <p class="stamp">Write it once. Sync it everywhere.</p>
   <p class="muted">MIT licensed. Built on <a href="https://agnostic-ai.org">agnostic-ai</a>.</p>
 </footer>
 
