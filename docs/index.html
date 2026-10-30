@@ -205,7 +205,7 @@ html { scroll-behavior: smooth; }
       <p class="muted">The agent installs agnostic-ai, links the clone, detects your tools, keeps your existing skills, and verifies the sync.</p>
     </div>
     <div role="tabpanel" id="panel-hand" aria-labelledby="tab-hand" hidden>
-      <p class="muted">macOS or Linux. No Homebrew? Use <code>npm install -g agnostic-ai</code>.</p>
+      <p class="muted">macOS or Linux, agnostic-ai 0.90.0 or newer. No Homebrew? Use <code>npm install -g agnostic-ai</code>.</p>
       <div class="prompt-body">
         <pre id="manual">brew install --cask Chemaclass/tap/agnostic-ai
 git clone https://github.com/Chemaclass/agnostic-ai-home.git ~/Code/agnostic-ai-home
@@ -303,24 +303,26 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 <span class="k">model:</span> fast
 <span class="k">readonly:</span> true
 <span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob]}
+<span class="k">x-codex:</span> {<span class="k">sandbox_mode:</span> null}
 <span class="c">---</span>
 You find code. You never edit files...</pre>
   </div>
   <div class="stack">
     <div class="file">
       <div class="file-path"><b>~/.claude/agents/locator.md</b><span>Claude Code</span></div>
-<pre><span class="k">tools:</span> [Read, Grep, Glob]
-<span class="k">model:</span> haiku
-<span class="k">effort:</span> low</pre>
+<pre><span class="k">model:</span> haiku
+<span class="k">effort:</span> low
+<span class="k">disallowedTools:</span> Write, Edit, NotebookEdit
+<span class="k">tools:</span> [Read, Grep, Glob]</pre>
     </div>
     <div class="file">
       <div class="file-path"><b>~/.codex/agents/locator.toml</b><span>Codex</span></div>
 <pre><span class="k">model</span> = <span class="s">"gpt-6-luna"</span>
-<span class="k">model_reasoning_effort</span> = <span class="s">"low"</span>
-<span class="k">sandbox_mode</span> = <span class="s">"read-only"</span></pre>
+<span class="k">model_reasoning_effort</span> = <span class="s">"low"</span></pre>
     </div>
   </div>
 </div>
+<p class="prose"><code>readonly</code> takes the editing tools away in Claude Code. Current Codex ignores an agent's sandbox setting, so the spec leaves it out and the agent keeps the session's permissions. For an enforced read-only Codex session, start it with <code>codex --sandbox read-only</code>.</p>
 
 <h2 id="tools-differ">Where tools really differ</h2>
 <p class="prose">Sync never translates hook events. The shell guard is one spec that Claude and Codex share, on the <code>PreToolUse</code> event.</p>
