@@ -303,7 +303,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 <pre><span class="k">version:</span> 1
 <span class="k">targets:</span> [claude, codex]       <span class="c"># tools to write</span>
 <span class="k">requires:</span> <span class="s">'>=0.90.0'</span>           <span class="c"># minimum agnostic-ai</span>
-<span class="k">builtins:</span> [handoff, handoff-hook]
+<span class="k">builtins:</span> [handoff, handoff-hook] <span class="c"># ready-made skill</span>
 <span class="k">models:</span>                        <span class="c"># tiers specs ask for</span>
   <span class="k">frontier:</span> {claude: fable,  codex: astra, effort: xhigh}
   <span class="k">strong:</span>   {claude: opus,   codex: sol,   effort: high}
@@ -311,7 +311,7 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
   <span class="k">fast:</span>     {claude: haiku,  codex: luna,  effort: low}</pre>
   </div>
   <div class="file">
-    <div class="file-path"><b>model: &lt;tier&gt;</b><span>agents/ skills/</span></div>
+    <div class="file-path"><b>Specs on each tier</b><span>model: &lt;tier&gt;</span></div>
 <pre><span class="k">fast</span>     locator
 <span class="k">strong</span>   reviewer
          claim-verifier
@@ -327,10 +327,10 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
     <div class="file-path"><b>agents/locator.md</b><span>source</span></div>
 <pre><span class="c">---</span>
 <span class="k">name:</span> locator
-<span class="k">model:</span> fast
-<span class="k">readonly:</span> true
-<span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob]}
-<span class="k">x-codex:</span> {<span class="k">sandbox_mode:</span> null}
+<span class="k">model:</span> fast        <span class="c"># a tier, not a model</span>
+<span class="k">readonly:</span> true      <span class="c"># each tool's own way</span>
+<span class="k">x-claude:</span> {<span class="k">tools:</span> [Read, Grep, Glob]}  <span class="c"># Claude only</span>
+<span class="k">x-codex:</span> {<span class="k">sandbox_mode:</span> null}        <span class="c"># Codex only</span>
 <span class="c">---</span>
 You find code. You never edit files...</pre>
   </div>
@@ -351,16 +351,57 @@ You find code. You never edit files...</pre>
 </div>
 <p class="prose"><code>readonly</code> takes the editing tools away in Claude Code. Current Codex ignores an agent's sandbox setting, so the spec leaves it out and the agent keeps the session's permissions. For an enforced read-only Codex session, start it with <code>codex --sandbox read-only</code>.</p>
 
-<h2 id="tools-differ">Where tools really differ</h2>
-<p class="prose">Sync never translates hook events. The shell guard is one spec that Claude and Codex share, on the <code>PreToolUse</code> event.</p>
-<div class="file">
-    <div class="file-path"><b>hooks/guard-shell.yaml</b><span>Claude, Codex</span></div>
-<pre><span class="k">targets:</span> [claude, codex]
-<span class="k">event:</span> PreToolUse
-<span class="k">matcher:</span> Bash
+<h2 id="tools-differ">Hooks and skills, in each tool's terms</h2>
+<p class="prose">A hook runs a script when the agent acts. Write it with plain words like <code>before-tool</code> and <code>shell</code>; sync turns them into each tool's event and tool names.</p>
+<div class="split">
+  <div class="file">
+    <div class="file-path"><b>hooks/guard-shell.yaml</b><span>source</span></div>
+<pre><span class="k">name:</span> guard-shell
+<span class="k">targets:</span> [claude, codex]
+<span class="k">on:</span> before-tool      <span class="c"># before a tool runs</span>
+<span class="k">match:</span> shell         <span class="c"># only shell commands</span>
 <span class="k">command:</span> <span class="s">"$HOME/.agnostic-ai/scripts/guard-shell.py"</span></pre>
+  </div>
+  <div class="stack">
+    <div class="file">
+      <div class="file-path"><b>~/.claude/settings.json</b><span>Claude Code</span></div>
+<pre><span class="s">"PreToolUse"</span>: [{ <span class="s">"matcher"</span>: <span class="s">"Bash"</span>,
+  <span class="s">"hooks"</span>: [{ <span class="s">"command"</span>: <span class="s">"...guard-shell.py"</span> }] }]</pre>
+    </div>
+    <div class="file">
+      <div class="file-path"><b>~/.codex/hooks.json</b><span>Codex</span></div>
+<pre><span class="s">"PreToolUse"</span>: [{ <span class="s">"matcher"</span>: <span class="s">"Bash"</span>,
+  <span class="s">"hooks"</span>: [{ <span class="s">"command"</span>: <span class="s">"...guard-shell.py"</span> }] }]</pre>
+    </div>
+  </div>
 </div>
-<p class="prose">It blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text. Codex runs it only after you trust it once in <code>/hooks</code>.</p>
+<p class="prose">This guard blocks force pushes without a lease, recursive <code>rm</code> with a glob, printing secret files, and em or en dashes in published text. Codex runs a hook only after you trust it once in <code>/hooks</code>.</p>
+
+<p class="prose">A skill is a reusable instruction set the agent can load. One flag keeps a skill manual, so it runs only when you ask for it. Each tool gets its own setting.</p>
+<div class="split">
+  <div class="file">
+    <div class="file-path"><b>skills/gh-issues/SKILL.md</b><span>source</span></div>
+<pre><span class="c">---</span>
+<span class="k">name:</span> gh-issues
+<span class="k">disable-model-invocation:</span> true  <span class="c"># manual only</span>
+<span class="k">x-claude:</span>
+  <span class="k">argument-hint:</span> <span class="s">"[--limit N] [--dry-run]"</span>
+<span class="c">---</span>
+# Work the queue...</pre>
+  </div>
+  <div class="stack">
+    <div class="file">
+      <div class="file-path"><b>~/.claude/skills/gh-issues/SKILL.md</b><span>Claude Code</span></div>
+<pre><span class="k">disable-model-invocation:</span> true
+<span class="k">argument-hint:</span> <span class="s">"[--limit N] [--dry-run]"</span></pre>
+    </div>
+    <div class="file">
+      <div class="file-path"><b>~/.agents/skills/gh-issues/agents/openai.yaml</b><span>Codex</span></div>
+<pre><span class="k">policy:</span>
+  <span class="k">allow_implicit_invocation:</span> false</pre>
+    </div>
+  </div>
+</div>
 
 <h2 id="make-it-yours">Make it yours without forking</h2>
 <p class="prose">Never edit tracked files. Put your changes in <code>~/.agnostic-ai/local/</code>. A new name is added. A file with the same kind and name as a shared spec merges into it: write only the fields that change, and a <code>::parent</code> line to extend the body. <code>git pull</code> never conflicts.</p>
@@ -370,6 +411,13 @@ You find code. You never edit files...</pre>
 AGNOSTIC_AI.md               <span class="c"># appended after the shared agreements</span>
 skills/work-notes/SKILL.md   <span class="c"># a private skill</span>
 agents/reviewer.md           <span class="c"># edits agents/reviewer.md</span></pre>
+</div>
+<p class="prose">That last file can be three lines. It moves the shared reviewer to the top tier on this machine, so it runs on <code>fable</code> in Claude Code and <code>gpt-6-astra</code> in Codex. Everything else, body included, comes from the shared spec.</p>
+<div class="file tree">
+  <div class="file-path"><b>~/.agnostic-ai/local/agents/reviewer.md</b><span>merges into the shared spec</span></div>
+<pre><span class="c">---</span>
+<span class="k">model:</span> frontier
+<span class="c">---</span></pre>
 </div>
 <p class="prose">To switch a shared skill, agent, or hook off, create the same path under <code>local/</code> with only <code>name</code> and <code>targets-exclude: [claude, codex]</code>. Run <code>agnostic-ai list --global</code> to see which layer wins.</p>
 
