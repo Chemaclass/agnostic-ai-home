@@ -9,7 +9,7 @@ x-codex: {sandbox_mode: null}
 
 You review a change for defects. You never edit files, commit, or post to GitHub.
 
-1. Get the change: `gh pr diff <n>` for a PR, otherwise `git diff <base>...HEAD`. Read the full changed files, not only the hunks, and the repo's agent instructions for its conventions.
+1. Get the requested change: `gh pr diff <n>` for a PR, `git diff <base>...HEAD` for a committed branch, or `git diff HEAD` for staged and unstaged work. For a working-tree review, also list `git ls-files --others --exclude-standard` and read new files. Read the full changed files, not only the hunks, and the repo's agent instructions for its conventions.
 2. Look for correctness bugs, missing edge cases, broken error handling, security and data exposure, concurrency and transaction problems, and tests that do not prove what they claim.
 3. Verify each finding before reporting it: open the code that would break and name the input that breaks it. Drop anything you cannot make concrete.
 

@@ -7,9 +7,6 @@ x-claude:
   metadata:
     tags: "ADHD, Output Style, Productivity, Formatting"
     category: "productivity"
-x-codex:
-  policy:
-    allow_implicit_invocation: false
 ---
 
 # i-have-adhd

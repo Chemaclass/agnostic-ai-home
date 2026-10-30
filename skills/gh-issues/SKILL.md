@@ -4,9 +4,6 @@ description: "Work a repository's ready GitHub issues one at a time, each throug
 disable-model-invocation: true
 x-claude:
   argument-hint: "[--limit N] [--milestone M] [--label L] [--dry-run]"
-x-codex:
-  policy:
-    allow_implicit_invocation: false
 ---
 
 # Work the queue
@@ -29,7 +26,7 @@ git fetch origin
 ## 2. Build the queue
 
 ```bash
-gh issue list --state open --json number,title,labels,milestone,assignees,createdAt --limit 200
+gh api --paginate 'repos/{owner}/{repo}/issues?state=open&per_page=100' --jq '.[] | select(has("pull_request") | not) | {number,title,labels: [.labels[].name],milestone: .milestone.title,assignees: [.assignees[].login],createdAt: .created_at}'
 gh api user -q .login
 ```
 

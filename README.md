@@ -39,11 +39,11 @@ Put your changes in `~/.agnostic-ai/local/`. It is gitignored but still synced, 
 ~/.agnostic-ai/local/agents/<name>.md     # add an agent, or edit a shared one
 ```
 
-A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.87.0 or newer, which `sync.sh` checks.
+A same-name local spec merges into the shared one: write only the fields that change, and `::parent` to extend the body. Needs agnostic-ai 0.90.0 or newer, which `sync.sh` checks.
 
 `agnostic-ai.yaml` selects Claude Code and Codex for a bare `agnostic-ai sync --global`. To change that list on this machine, set `targets:` in `local/agnostic-ai.yaml`. `local/targets` overrides the list only when running `sync.sh`.
 
-Skill argument hints live under `x-claude`; skill metadata lives under `x-claude`. Manual-only skills retain their native invocation policies. Codex agent specs omit `sandbox_mode`, which current Codex ignores. For an enforced read-only Codex session, start it with `codex --sandbox read-only`.
+Skill argument hints and Claude metadata live under `x-claude`. `disable-model-invocation` keeps manual-only skills explicit in both tools. Skill model and effort settings apply to Claude Code; Codex selects them on agents. Codex agent specs omit `sandbox_mode`, which current Codex ignores. For an enforced read-only Codex session, start it with `codex --sandbox read-only`.
 
 [SETUP.md](SETUP.md) covers collisions, switching specs off, and updates.
 

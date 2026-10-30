@@ -1,6 +1,6 @@
 version: 1
 targets: [claude, codex]
-requires: '>=0.88.0'
+requires: '>=0.90.0'
 builtins: [handoff, handoff-hook]
 models:
   frontier: {claude: fable,  codex: astra, effort: xhigh}
