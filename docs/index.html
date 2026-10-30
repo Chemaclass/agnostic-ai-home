@@ -126,6 +126,7 @@ button.copy:active { transform: scale(0.96); }
 .file-path b { color: var(--fg); font-weight: 600; }
 .file pre { padding: 14px 16px; }
 .split { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; margin-top: 22px; }
+.split + p { margin-top: 18px; }
 .stack { display: grid; gap: 14px; }
 .pair { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin: 22px 0 16px; }
 
@@ -168,6 +169,7 @@ html { scroll-behavior: smooth; }
     <a class="brand" href="#top"><svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>agnostic-ai home</a>
     <ul class="sections">
       <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#config">Config</a></li>
       <li><a href="#native-files">Native files</a></li>
       <li><a href="#make-it-yours">Make it yours</a></li>
       <li><a href="#for-agents">For agents</a></li>
@@ -292,6 +294,31 @@ ln -s ~/Code/agnostic-ai-home ~/.agnostic-ai
 </div>
 
 <p class="prose">Text outside the managed block stays yours. Sync records what it owns in <code>~/.agnostic-ai/state/</code> and removes only that.</p>
+
+<h2 id="config">One config for every tool</h2>
+<p class="prose">One file picks the tools and names the model tiers. Specs ask for a tier, never a model, so a model change is one line.</p>
+<div class="split">
+  <div class="file">
+    <div class="file-path"><b>agnostic-ai.yaml</b><span>source</span></div>
+<pre><span class="k">version:</span> 1
+<span class="k">targets:</span> [claude, codex]       <span class="c"># tools to write</span>
+<span class="k">requires:</span> <span class="s">'>=0.90.0'</span>           <span class="c"># minimum agnostic-ai</span>
+<span class="k">builtins:</span> [handoff, handoff-hook]
+<span class="k">models:</span>                        <span class="c"># tiers specs ask for</span>
+  <span class="k">frontier:</span> {claude: fable,  codex: astra, effort: xhigh}
+  <span class="k">strong:</span>   {claude: opus,   codex: sol,   effort: high}
+  <span class="k">balanced:</span> {claude: sonnet, codex: terra, effort: medium}
+  <span class="k">fast:</span>     {claude: haiku,  codex: luna,  effort: low}</pre>
+  </div>
+  <div class="file">
+    <div class="file-path"><b>model: &lt;tier&gt;</b><span>agents/ skills/</span></div>
+<pre><span class="k">fast</span>     locator
+<span class="k">strong</span>   reviewer
+         claim-verifier
+         pr-value-audit</pre>
+  </div>
+</div>
+<p class="prose">Sync expands each short name to the tool's full model name, so <code>luna</code> becomes <code>gpt-6-luna</code> in Codex. Point <code>strong</code> at a new model and both agents on it move in Claude Code and Codex. The skill moves in Claude Code, since Codex sets models on agents only.</p>
 
 <h2 id="native-files">One spec, two native files</h2>
 <p class="prose">Each tool wants a different shape. The spec says it once, with per-tool values where tools differ. A field a tool cannot honor is dropped with a note at sync time, never silently.</p>
