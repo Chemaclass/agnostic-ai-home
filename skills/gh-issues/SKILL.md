@@ -1,6 +1,6 @@
 ---
 name: gh-issues
-description: "Work a repository's ready GitHub issues, each through gh-issue and its own PR. Run it to work the backlog or the queue."
+description: "Use to work a repository's ready GitHub issues, each through gh-issue and its own PR, or to work the backlog or queue."
 disable-model-invocation: true
 x-claude:
   argument-hint: "[--limit N] [--milestone M] [--label L] [--dry-run]"

@@ -1,6 +1,6 @@
 ---
 name: i-have-adhd
-description: "Shape output for a reader with ADHD: action first, numbered steps, state restated each turn, no tangents, concrete time estimates, visible wins. Stays on until 'stop adhd mode'."
+description: "Use when the reader has ADHD: action first, numbered steps, state restated each turn, no tangents, concrete time estimates. Stays on until 'stop adhd mode'."
 disable-model-invocation: true
 license: MIT
 x-claude:
