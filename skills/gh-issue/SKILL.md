@@ -56,5 +56,6 @@ gh repo view --json defaultBranchRef -q .defaultBranchRef.name
 
 - One issue, one PR, one branch. Never widen scope silently: out-of-scope work gets its own issue, and the PR mentions it.
 - Never mark an acceptance criterion done without running its verification.
+- Never invent decisions or mark external prerequisites done. Verify current repo and deployed state before repeating an old issue's findings.
 - If work pauses while the issue stays open, unassign yourself: `gh issue edit <n> --remove-assignee @me`.
 - If the issue is wrong or impossible, say so in an issue comment and stop. Do not invent a different feature.
