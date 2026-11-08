@@ -32,7 +32,6 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Never bypass required hooks or claim unrun checks passed.
 - When PR CI runs on one OS and the change touches paths, file watching, renames, or permissions, run the full OS matrix before merging.
 - Never run typechecks concurrently. Budget and coordinate expensive checks through one caller, across worktrees and delegates.
-- Benchmarks: land harness changes before the PR that measures a delta, measure on current main, state the baseline commit and method, and re-run an anomalous reading.
 
 ## Secrets
 
@@ -54,8 +53,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - When asked to review a PR, post actionable findings directly as PR review comments by default, then link them in the reply.
 - Conventional commits, with the repo's type names; its history wins.
 - Never amend or rewrite pushed history.
-- Clean up by default once a PR merges: delete its local branch and worktree, and the remote branch when `--delete-branch` could not (a worktree holding the branch blocks it). Run `git fetch --prune` and `git worktree prune`. Keep a branch with unpushed commits or an open PR, and say so.
-- After removing worktrees, run `~/.agnostic-ai/scripts/reap-stale-agents.sh`. Tools started in a worktree, such as a Codex review broker and its MCP children, outlive it; the script reaps only processes and broker state whose directory is gone.
+- Clean up by default once a PR merges: delete its local branch and worktree, and the remote branch when `--delete-branch` could not (a worktree holding the branch blocks it). Run `git fetch --prune` and `git worktree prune`. Keep a branch with unpushed commits or an open PR, and say so. Then run `~/.agnostic-ai/scripts/reap-stale-agents.sh` to stop tools left running in removed worktrees.
 
 ## Code
 
@@ -64,7 +62,6 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 - Remove stale comments in code you touch, and leave out notes about unbuilt work.
 - Prefer runtime validation over a type assertion when it states the contract better.
 - Reuse shared helpers. Replace an obsolete pattern when the change already touches it.
-- In domain code, keep decisions with the data they protect and wrap primitives that carry rules.
 - Search paginated or async collections lazily, stop at the match, and bound concurrent requests. Load every row only when the result needs it, such as an aggregate.
 - Write portable shell: no GNU-only flags (macOS `sed -i` needs `''`).
 - Verify a package name exists before installing it.

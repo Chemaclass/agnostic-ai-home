@@ -1,9 +1,11 @@
 ---
 name: object-design
-description: "Responsibility-driven OO design, with Object Calisthenics as detectors. Use when refactoring or reviewing domain code where services decide from getters, primitives carry rules, or collection logic repeats, or when asked for tell-don't-ask or an OO design review. Not for DTOs, adapters, ORM mappings, or hot paths."
+description: "Responsibility-driven OO design, with Object Calisthenics as detectors. Use when writing, refactoring or reviewing domain code where services decide from getters, primitives carry rules, or collection logic repeats, or when asked for tell-don't-ask or an OO design review. Not for DTOs, adapters, ORM mappings, or hot paths."
 ---
 
 # Object design
+
+In domain code, keep decisions with the data they protect and wrap primitives that carry rules.
 
 Goal: give each concept, decision, invariant, and collaboration the right home. Not many small classes. Not rule compliance.
 
