@@ -15,6 +15,19 @@ if [ "$(basename "$0")" = pre-commit ]; then
   "$home/scripts/check.sh"
   set -- --check
 fi
+# Every tool loads AGNOSTIC_AI.md, so stop a write that would ship an
+# uncommitted change removing most of it, such as a prompt pasted over it.
+case " $* " in *" --plan "*|*" --check "*|*" --dry-run "*) ;; *)
+  if [ -z "${AGNOSTIC_AI_SYNC_ANYWAY:-}" ] && git -C "$home" rev-parse --verify -q HEAD:AGNOSTIC_AI.md >/dev/null 2>&1; then
+    committed=$(git -C "$home" show HEAD:AGNOSTIC_AI.md | wc -l | tr -d ' ')
+    removed=$(git -C "$home" diff --numstat HEAD -- AGNOSTIC_AI.md | awk '{print $2}')
+    if [ "${removed:-0}" -gt 0 ] && [ $((removed * 2)) -gt "$committed" ]; then
+      echo "sync.sh: $home/AGNOSTIC_AI.md has an uncommitted change that removes $removed of its $committed committed lines, and every tool would load it." >&2
+      echo "Review it with: git -C $home diff AGNOSTIC_AI.md. Restore it with git restore, commit it, or rerun with AGNOSTIC_AI_SYNC_ANYWAY=1." >&2
+      exit 1
+    fi
+  fi
+esac
 if [ -f "$home/local/targets" ]; then
   targets=$(tr -d ' \n' < "$home/local/targets")
   set -- --target "$targets" "$@"

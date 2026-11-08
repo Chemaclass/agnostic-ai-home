@@ -9,7 +9,7 @@ import unittest
 SCRIPT = pathlib.Path(__file__).resolve().parent.parent / "sync.sh"
 
 
-class GlobalSync(unittest.TestCase):
+class SyncHarness(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
@@ -22,14 +22,25 @@ class GlobalSync(unittest.TestCase):
         for variable in ["GEMINI_CLI_HOME", "CODEX_HOME", "CLAUDE_CONFIG_DIR"]:
             self.env.pop(variable, None)
 
+    def run_sync(self, *args, env=None):
+        return subprocess.run([str(SCRIPT), *args], cwd=self.source, env=env or self.env, capture_output=True, text=True)
+
+    def commit_instructions(self, lines):
+        (self.source / "AGNOSTIC_AI.md").write_text("".join(f"Rule {n}.\n" for n in range(lines)))
+        git = lambda *args: subprocess.run(["git", "-C", str(self.source), *args], check=True, capture_output=True)
+        git("init", "-q")
+        git("add", "-A")
+        git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "rules")
+
     def sync(self, allow_notes=False):
-        result = subprocess.run([str(SCRIPT)], cwd=self.source, env=self.env, capture_output=True, text=True)
+        result = self.run_sync()
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         if allow_notes:
             self.assertTrue(all(line.startswith("  note:") for line in result.stderr.splitlines()), result.stderr)
         else:
             self.assertEqual(result.stderr, "")
 
+class GlobalSync(SyncHarness):
     def test_uses_the_home_config_targets(self):
         self.sync()
         content = (self.home / ".gemini/GEMINI.md").read_text()
@@ -90,3 +101,32 @@ class GlobalSync(unittest.TestCase):
 
         checked = subprocess.run([str(SCRIPT), "--check"], cwd=self.source, env=self.env, capture_output=True, text=True)
         self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
+
+
+class InstructionsGuard(SyncHarness):
+    """A paste over AGNOSTIC_AI.md reaches every tool, so sync stops on it."""
+
+    def setUp(self):
+        super().setUp()
+        self.commit_instructions(10)
+
+    def test_refuses_an_uncommitted_change_that_removes_most_of_the_file(self):
+        (self.source / "AGNOSTIC_AI.md").write_text("Refine my global instructions.\n")
+        result = self.run_sync()
+        self.assertNotEqual(result.returncode, 0)
+        for want in ["AGNOSTIC_AI.md", "removes 10 of its 10 committed lines", "git -C", "AGNOSTIC_AI_SYNC_ANYWAY=1"]:
+            self.assertIn(want, result.stderr)
+        self.assertFalse((self.home / ".gemini/GEMINI.md").exists())
+
+    def test_override_syncs_anyway(self):
+        (self.source / "AGNOSTIC_AI.md").write_text("Refine my global instructions.\n")
+        result = self.run_sync(env=dict(self.env, AGNOSTIC_AI_SYNC_ANYWAY="1"))
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_previews_and_small_edits_still_run(self):
+        (self.source / "AGNOSTIC_AI.md").write_text("Refine my global instructions.\n")
+        self.assertEqual(self.run_sync("--plan").returncode, 0)
+        with open(self.source / "AGNOSTIC_AI.md", "w") as f:
+            f.write("".join(f"Rule {n}.\n" for n in range(9)) + "A new rule.\n")
+        self.sync()
+
