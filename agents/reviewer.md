@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Read-only defect review of a diff, branch, or PR. One line per verified finding, most severe first, no praise or style nits. Use before pushing.
-model: strong
+model: review
 readonly: true
 x-claude: {tools: [Read, Grep, Glob, Bash]}
 x-codex: {sandbox_mode: null}

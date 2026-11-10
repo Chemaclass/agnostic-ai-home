@@ -69,7 +69,7 @@ class GlobalSync(SyncHarness):
         for name, claude_model, codex_model, effort in [
             ("locator", "haiku", "gpt-6-luna", "low"),
             ("claim-verifier", "opus", "gpt-6.1-sol", "high"),
-            ("reviewer", "opus", "gpt-6.1-sol", "high"),
+            ("reviewer", "fable", "gpt-6-astra", "medium"),
         ]:
             with self.subTest(agent=name):
                 native = (claude / "agents" / f"{name}.md").read_text()
@@ -80,6 +80,10 @@ class GlobalSync(SyncHarness):
                 self.assertIn(f'model = "{codex_model}"', native)
                 self.assertIn(f'model_reasoning_effort = "{effort}"', native)
                 self.assertNotIn("sandbox_mode", native)
+
+        tester = (claude / "agents" / "tester.md").read_text()
+        self.assertIn("model: haiku\n", tester)
+        self.assertNotIn("disallowedTools", tester)
 
         for name in ["gh-issues", "i-have-adhd", "pr-value-audit"]:
             with self.subTest(skill=name):
