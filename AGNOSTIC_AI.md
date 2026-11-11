@@ -13,7 +13,7 @@ Personal defaults; the task and the project's rules win on conflict. Source: `~/
 ## Delegate
 
 - Delegate independent work only when authorized; `locator` and `reviewer` need no authorization. Give each delegate a name, owned scope and validation budget; return long results as a file path.
-- Inherit the current model unless a supported task-specific tier is justified. Set a delegate's effort by task: low for lookups and mechanical edits, high for design and debugging.
+- Inherit the current model unless a task-specific tier is justified: `strong` for everyday coding, `frontier` for ambitious open-ended work, `balanced` when `strong` breezes through, `fast` for lookups and high-volume subagents. Set a delegate's effort by task: low for lookups and mechanical edits, high for design and debugging.
 - Run `reviewer` before pushing.
 
 ## Debug and change safely
